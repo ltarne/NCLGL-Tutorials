@@ -1,0 +1,28 @@
+#pragma once
+#include "OGLRenderer.h"
+#include "SceneNode.h"
+#include "Camera.h"
+
+class Renderer : public OGLRenderer	{
+public:
+	Renderer(Window &parent);
+	virtual ~Renderer(void);
+
+	virtual void UpdateScene(float msec);
+	virtual void RenderScene();
+
+	void SwitchToPerspective();
+	void SwitchToOrthographic();
+
+	
+	void SetRotation(float rotation) { Matrix4::Rotation(rotation, Vector3(0,0,1)); }
+	void SetScale(float scale) { root->SetModelScale(Vector3(scale,scale,scale)); }
+	void SetPosition(Vector3 position) { root->SetTransform(Matrix4::Translation(position)); }
+
+protected:
+
+	void DrawNode(SceneNode* node);
+
+	SceneNode* root;
+	Camera* camera;
+};
