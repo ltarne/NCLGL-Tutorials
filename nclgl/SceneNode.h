@@ -14,8 +14,11 @@ public:
 	inline const Matrix4&	GetTransform()					const	{ return transform; }
 	inline Matrix4			GetWorldTransform()				const	{ return worldTransform; }
 
-	inline void SetModelScale(Vector3 modelScale) { this->modelScale = modelScale; }
-	inline Vector3 GetModelScale()			 const { return modelScale; }
+	inline void SetScale(Matrix4 scale) { this->scale = scale; }
+	inline Matrix4 GetScale()			 const { return scale; }
+
+	inline void SetRotation(Matrix4 rotation) { this->rotation = rotation; }
+	inline Matrix4 GetRotation()			 const { return rotation; }
 
 	inline void	SetColour(Vector4 colour) { this->colour = colour; }
 	inline Vector4 GetColour()			const { return colour; }
@@ -38,7 +41,9 @@ protected:
 
 	Matrix4 worldTransform;
 	Matrix4 transform;
-	Vector3 modelScale;
+	Matrix4 rotation;
+	Matrix4 scale;
+	//Vector3 modelScale;
 
 	Mesh* mesh;
 	Vector4 colour;

@@ -15,8 +15,8 @@ public:
 	void SwitchToOrthographic();
 
 	
-	void SetRotation(float rotation) { Matrix4::Rotation(rotation, Vector3(0,0,1)); }
-	void SetScale(float scale) { root->SetModelScale(Vector3(scale,scale,scale)); }
+	void SetRotation(float rotation) { root->SetRotation(Matrix4::Rotation(rotation, Vector3(0,0,1))); }
+	void SetScale(float scale) { root->SetScale(Matrix4::Scale(Vector3(scale,scale,scale))); }
 	void SetPosition(Vector3 position) { root->SetTransform(Matrix4::Translation(position)); }
 
 protected:
