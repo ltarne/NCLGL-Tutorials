@@ -6,7 +6,8 @@
 *.slo
 *.lo
 *.o
-*.obj
+#*.obj
+!Meshes/*.obj
 
 # Precompiled Headers
 *.gch
@@ -15,7 +16,7 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
+#*.dll
 
 # Fortran module files
 *.mod
@@ -25,7 +26,7 @@
 *.lai
 *.la
 *.a
-*.lib
+#*.lib
 
 # Executables
 *.exe
@@ -49,8 +50,12 @@
 
 # Build results
 [Dd]ebug/
+!SOIL/[Dd]ebug/
+!GLEW/lib/[Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
+!SOIL/[Rr]elease/
+!GLEW/lib/[Rr]elease/
 [Rr]eleases/
 x64/
 x86/
