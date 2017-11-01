@@ -16,7 +16,14 @@ int main() {
 		return -1;
 	}
 
-	float scale		= 100.0f;
+	
+	Shader* triangleShader = new Shader(SHADERDIR"sceneVert.vert", SHADERDIR"sceneFrag.frag");
+	triangleShader->LinkProgram();
+
+	SceneNode* triangle = new SceneNode(triangleShader, Mesh::GenerateTriangle());
+	renderer.AttachSceneGraph(triangle);
+
+	float scale		= 1.0f;
 	float rotation	= 0.0f;
 	Vector3 position(0, 0, -2.0f);
 
@@ -51,12 +58,14 @@ int main() {
 		if(Window::GetKeyboard()->KeyDown(KEYBOARD_P))
 			position.z+= 1.0f;
 
-		renderer.SetRotation(rotation);
+		/*renderer.SetRotation(rotation);
 		renderer.SetScale(scale);
-		renderer.SetPosition(position);
+		renderer.SetPosition(position);*/
 		renderer.UpdateScene(w.GetTimer()->GetTimedMS());
 		renderer.RenderScene();
 	}
+
+	delete triangleShader;
 
 	return 0;
 }

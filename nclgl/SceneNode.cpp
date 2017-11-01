@@ -1,7 +1,8 @@
 #include "SceneNode.h"
 
 
-SceneNode::SceneNode(Mesh * mesh, Vector4 colour) {
+SceneNode::SceneNode(Shader* shader, Mesh * mesh, Vector4 colour) {
+	this->shader	= shader;
 	this->mesh		= mesh;
 	this->colour	= colour;
 	parent			= NULL;
@@ -36,6 +37,10 @@ void SceneNode::Update(float msec) {
 }
 
 void SceneNode::Draw(const OGLRenderer &renderer) {
+
+	glUniform1i(glGetUniformLocation(shader->GetProgram(), "tex"), 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mesh->GetTexture());
 	if (mesh != nullptr) {
 		mesh->Draw();
 	}

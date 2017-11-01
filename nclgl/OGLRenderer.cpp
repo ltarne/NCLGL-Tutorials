@@ -163,7 +163,10 @@ Destructor. Deletes the default shader, and the OpenGL rendering context.
 OGLRenderer::~OGLRenderer(void)	{
 	delete orthoDebugData;
 	delete perspectiveDebugData;
-	delete currentShader;
+	if (currentShader) {
+		delete currentShader;
+	}
+	
 	delete debugDrawShader;
 	wglDeleteContext(renderContext);
 }
@@ -229,12 +232,12 @@ projMatrix, and textureMatrix. Updates them with the relevant
 matrix data. Sanity checks currentShader, so is always safe to
 call.
 */
-void OGLRenderer::UpdateShaderMatrices()	{
-	if(currentShader) {
-		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"),	1,false, (float*)&modelMatrix);
-		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "viewMatrix") ,	1,false, (float*)&viewMatrix);
-		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "projMatrix") ,	1,false, (float*)&projMatrix);
-		glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "textureMatrix")  ,1,false, (float*)&textureMatrix);
+void OGLRenderer::UpdateShaderMatrices(Shader* s)	{
+	if(s) {
+		glUniformMatrix4fv(glGetUniformLocation(s->GetProgram(), "modelMatrix"),	1,false, (float*)&modelMatrix);
+		glUniformMatrix4fv(glGetUniformLocation(s->GetProgram(), "viewMatrix") ,	1,false, (float*)&viewMatrix);
+		glUniformMatrix4fv(glGetUniformLocation(s->GetProgram(), "projMatrix") ,	1,false, (float*)&projMatrix);
+		glUniformMatrix4fv(glGetUniformLocation(s->GetProgram(), "textureMatrix")  ,1,false, (float*)&textureMatrix);
 	}
 }
 
@@ -308,7 +311,7 @@ void	OGLRenderer::DrawDebugPerspective(Matrix4*matrix)  {
 	
 	perspectiveDebugData->Clear();
 	drawnDebugPerspective = true;
-	SetCurrentShader(currentShader);
+	//SetCurrentShader(currentShader);
 }
 
 
@@ -327,7 +330,7 @@ void	OGLRenderer::DrawDebugOrtho(Matrix4*matrix) {
 
 	orthoDebugData->Clear();
 	drawnDebugOrtho = true;
-	SetCurrentShader(currentShader);
+	//SetCurrentShader(debugDrawShader);
 }
 
 void	OGLRenderer::DrawDebugLine  (DebugDrawMode mode, const Vector3 &from,const Vector3 &to,const Vector3 &fromColour,const Vector3 &toColour) {

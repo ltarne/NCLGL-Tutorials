@@ -122,7 +122,7 @@ public:
 
 protected:
 	virtual void	Resize(int x, int y);	
-	void			UpdateShaderMatrices();
+	void			UpdateShaderMatrices(Shader* s);
 	void			SetCurrentShader(Shader*s);
 
 	void			SetTextureRepeating(GLuint target, bool state);

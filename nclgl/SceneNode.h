@@ -7,24 +7,27 @@
 class SceneNode
 {
 public:
-	SceneNode(Mesh* m = nullptr, Vector4 colour = Vector4(1,1,1,1));
+	SceneNode(Shader* shader, Mesh* mesh = nullptr, Vector4 colour = Vector4(1,1,1,1));
 	~SceneNode();
 
 	inline void			SetTransform(const Matrix4 &transform)	{ this->transform = transform; }
 	inline const Matrix4&	GetTransform()					const	{ return transform; }
 	inline Matrix4			GetWorldTransform()				const	{ return worldTransform; }
 
-	inline void SetScale(Matrix4 scale) { this->scale = scale; }
-	inline Matrix4 GetScale()			 const { return scale; }
+	inline void		SetScale(Matrix4 scale) { this->scale = scale; }
+	inline Matrix4	GetScale()			 const { return scale; }
 
-	inline void SetRotation(Matrix4 rotation) { this->rotation = rotation; }
-	inline Matrix4 GetRotation()			 const { return rotation; }
+	inline void		SetRotation(Matrix4 rotation) { this->rotation = rotation; }
+	inline Matrix4	GetRotation()			 const { return rotation; }
 
-	inline void	SetColour(Vector4 colour) { this->colour = colour; }
-	inline Vector4 GetColour()			const { return colour; }
+	inline void		SetColour(Vector4 colour) { this->colour = colour; }
+	inline Vector4	GetColour()			const { return colour; }
 
-	inline void	SetMesh(Mesh* mesh) { this->mesh = mesh; }
+	inline void		SetMesh(Mesh* mesh) { this->mesh = mesh; }
 	inline Mesh*	GetMesh()	const	{ return mesh; }
+
+	inline void		SetShader(Shader* shader) { this->shader = shader; }
+	inline Shader*	GetShader() const { return shader; }
 
 	void AddChild(SceneNode* child);
 
@@ -43,8 +46,8 @@ protected:
 	Matrix4 transform;
 	Matrix4 rotation;
 	Matrix4 scale;
-	//Vector3 modelScale;
 
+	Shader* shader;
 	Mesh* mesh;
 	Vector4 colour;
 	

@@ -14,6 +14,8 @@ public:
 	void SwitchToPerspective();
 	void SwitchToOrthographic();
 
+	void AttachSceneGraph(SceneNode* node) { root->AddChild(node); }
+
 	
 	void SetRotation(float rotation) { root->SetRotation(Matrix4::Rotation(rotation, Vector3(0,0,1))); }
 	void SetScale(float scale) { root->SetScale(Matrix4::Scale(Vector3(scale,scale,scale))); }
