@@ -14,11 +14,16 @@ int main() {
 		return -1;
 	}
 
-	Shader* triangleShader = new Shader(SHADERDIR"sceneVert.vert", SHADERDIR"sceneFrag.frag");
+	Shader* triangleShader = new Shader(SHADERDIR"textureMatVert.vert", SHADERDIR"sceneFrag.frag");
 	triangleShader->LinkProgram();
 
+	Texture* brick = new Texture(TEXTUREDIR"brick.tga");
+
 	SceneNode* triangle = new SceneNode(triangleShader, Mesh::GenerateTriangle());
-	triangle->GetMesh()->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"brick.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0));
+	
+	//triangle->GetMesh()->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"brick.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0));
+	triangle->SetTexture(brick);
+
 	renderer.AttachSceneGraph(triangle);
 
 	float rotate = 0.0f;
@@ -26,19 +31,23 @@ int main() {
 		if(Window::GetKeyboard()->KeyDown(KEYBOARD_LEFT) ) {
 			--rotate;
 			//renderer.UpdateTextureMatrix(rotate);
+			triangle->GetTexture()->RotateMatrix(rotate);
 		}
 
 		if(Window::GetKeyboard()->KeyDown(KEYBOARD_RIGHT) ) {
 			++rotate;
 			//renderer.UpdateTextureMatrix(rotate);
+			triangle->GetTexture()->RotateMatrix(rotate);
 		}
 
 		if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_1) ) {
 			//renderer.ToggleFiltering();
+			triangle->GetTexture()->ToggleFiltering();
 		}
 
 		if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_2) ) {
 			//renderer.ToggleRepeating();
+			triangle->GetTexture()->ToggleRepeating();
 		}
 
 		renderer.UpdateScene(w.GetTimer()->GetTimedMS());
@@ -46,6 +55,7 @@ int main() {
 	}
 
 	delete triangleShader;
+	delete brick;
 
 	return 0;
 }

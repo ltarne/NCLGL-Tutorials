@@ -18,6 +18,23 @@ SceneNode::~SceneNode() {
 	}
 }
 
+void SceneNode::LoadUniforms() {
+	//Texture Uniforms
+	/*glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mesh->GetTexture());*/
+	glUniform1i(glGetUniformLocation(shader->GetProgram(), "tex"), 0);
+	
+
+	//Transform
+	glUniformMatrix4fv(glGetUniformLocation(shader->GetProgram(), "modelMatrix"), 1, false, (float*)&worldTransform);
+
+	//Texture Matrix
+	glUniformMatrix4fv(glGetUniformLocation(shader->GetProgram(), "textureMatrix"), 1, false, (float*)&texture->GetTextureMatrix());
+
+	//Colour
+	glUniform4fv(glGetUniformLocation(shader->GetProgram(), "nodeColour"), 1, (float*)&colour);
+}
+
 void SceneNode::AddChild(SceneNode* child) {
 	children.push_back(child);
 	child->parent = this;
@@ -37,10 +54,8 @@ void SceneNode::Update(float msec) {
 }
 
 void SceneNode::Draw(const OGLRenderer &renderer) {
-
-	glUniform1i(glGetUniformLocation(shader->GetProgram(), "tex"), 0);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, mesh->GetTexture());
+	LoadUniforms();
+	
 	if (mesh != nullptr) {
 		mesh->Draw();
 	}

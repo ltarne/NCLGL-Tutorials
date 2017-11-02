@@ -1,8 +1,6 @@
 #pragma once
-#include "Matrix4.h"
-#include "Vector3.h"
-#include "Vector4.h"
 #include "Mesh.h"
+#include "Texture.h"
 
 class SceneNode
 {
@@ -29,6 +27,14 @@ public:
 	inline void		SetShader(Shader* shader) { this->shader = shader; }
 	inline Shader*	GetShader() const { return shader; }
 
+	inline void		SetTexture(Texture* texture) {
+		this->texture = texture; 
+		mesh->SetTexture(*texture->GetTexture());
+	}
+	inline Texture*	GetTexture() { return texture; }
+
+	void LoadUniforms();
+
 	void AddChild(SceneNode* child);
 
 	virtual void Update(float msec);
@@ -49,6 +55,7 @@ protected:
 
 	Shader* shader;
 	Mesh* mesh;
+	Texture* texture;
 	Vector4 colour;
 	
 };

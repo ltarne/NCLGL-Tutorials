@@ -22,6 +22,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SceneNode.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -57,6 +58,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="SceneNode.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Data Types">
