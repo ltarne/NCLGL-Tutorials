@@ -14,7 +14,11 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)	{
 
 	init = true;
 
-	depth = false;
+	usingDepth = false;
+	usingAlpha = false;
+	blendMode = 0;
+	usingScissor = false;
+	usingStencil = false;
 }
 Renderer::~Renderer(void)	{
 	delete root;
@@ -30,10 +34,30 @@ void Renderer::UpdateScene(float msec) {
 
 void Renderer::RenderScene()	{
 	glClearColor(0.2f,0.2f,0.2f,1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);	
+
+	if (usingScissor) {
+		
+		glScissor((float)width / 2.5f, (float)height / 2.5f,
+			(float)width / 5.0f, (float)height / 5.0f);
+	}
+
+	/*if (usingStencil) {
+		
+
+		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+		glStencilFunc(GL_ALWAYS, 2, ~0);
+		glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+	}*/
 
 	DrawNode(root);
 
+	/*if (usingStencil) {
+		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+		glStencilFunc(GL_EQUAL, 2, ~0);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+	}*/
+	
 	SwapBuffers();	
 }
 
@@ -46,8 +70,8 @@ void Renderer::SwitchToOrthographic() {
 }
 
 void Renderer::ToggleAlphaBlend() {
-	alpha = !alpha;
-	alpha ? glEnable(GL_BLEND) : glDisable(GL_BLEND);
+	usingAlpha = !usingAlpha;
+	usingAlpha ? glEnable(GL_BLEND) : glDisable(GL_BLEND);
 }
 
 void Renderer::ToggleBlendMode() {
@@ -72,23 +96,44 @@ void Renderer::ToggleBlendMode() {
 	}
 }
 
+void Renderer::ToggleScissor() {
+	usingScissor = !usingScissor;
+	usingScissor ? glEnable(GL_SCISSOR_TEST) : glDisable(GL_SCISSOR_TEST);
+
+}
+
+void Renderer::ToggleStencil() {
+	usingStencil = !usingStencil;
+	usingStencil ? glEnable(GL_STENCIL_TEST) : glDisable(GL_STENCIL_TEST);
+}
+
 void Renderer::ToggleDepth() {
-	depth = !depth;
-	depth ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+	usingDepth = !usingDepth;
+	usingDepth ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
 }
 
 void Renderer::DrawNode(SceneNode* node) {
 	glUseProgram(node->GetShader()->GetProgram());
 	UpdateShaderMatrices(node->GetShader());
 
+	if (usingStencil) {
+		node->ActivateSpecialSettings();
+	}
+
 	if (node->GetMesh()) {
 		node->Draw(*this);
+	}
+
+	if (usingStencil) {
+		node->DeactivateSpecialSettings();
 	}
 
 	glUseProgram(0);
 
 	for (vector<SceneNode*>::const_iterator i = node->GetChildIteratorStart(); i != node->GetChildIteratorEnd(); ++i) {
+		//Might be useful at some point to have a function to change opengl settings based on a nodes particular needs
 		DrawNode(*i);
+		//Which could then be reverted in another function
 	}
 }
 

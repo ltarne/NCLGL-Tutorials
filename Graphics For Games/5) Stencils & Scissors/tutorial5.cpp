@@ -1,5 +1,6 @@
 #include "../../nclGL/window.h"
-#include "Renderer.h"
+#include "../../nclgl/Renderer.h"
+
 
 #pragma comment(lib, "nclgl.lib")
 
@@ -14,6 +15,25 @@ int main() {
 		return -1;
 	}
 
+	Shader* triangleShader = new Shader(SHADERDIR"textureMatVert.vert", SHADERDIR"stencilFrag.frag");
+	triangleShader->LinkProgram();
+
+	Texture* brick = new Texture(TEXTUREDIR"brick.tga");
+	Texture* chessboard = new Texture(TEXTUREDIR"chessboard.tga");
+
+	Mesh* squareMesh = Mesh::GenerateQuad();
+	Mesh* triangleMesh = Mesh::GenerateTriangle();
+
+	SceneNode* triangle = new SceneNode(triangleShader, triangleMesh);
+	triangle->SetTexture(brick);
+
+	StencilNode* square = new StencilNode(triangleShader, squareMesh);
+	square->SetTransform(Matrix4::Translation(Vector3(0.0f, 0.0f, 0.0f)));
+	square->SetTexture(chessboard);
+
+	renderer.AttachSceneGraph(triangle);
+	renderer.AttachSceneGraph(square);
+
 	while(w.UpdateWindow() && !Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE)){
 		if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_1)) {
 			renderer.ToggleScissor();
@@ -22,7 +42,15 @@ int main() {
 			renderer.ToggleStencil();
 		}
 
+		renderer.UpdateScene(w.GetTimer()->GetTimedMS());
 		renderer.RenderScene();
 	}
+
+	delete triangleShader;
+	delete brick;
+	delete chessboard;
+	delete triangleMesh;
+	delete squareMesh;
+
 	return 0;
 }

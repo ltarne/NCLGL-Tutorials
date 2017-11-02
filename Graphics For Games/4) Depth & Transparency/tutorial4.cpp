@@ -64,6 +64,9 @@ int main()	{
 
 	delete triangleShader;
 	delete brick;
+	delete glass;
+	delete triangleMesh;
+	delete squareMesh;
 
 	return 0;
 }

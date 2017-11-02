@@ -1,6 +1,6 @@
 #pragma once
 #include "OGLRenderer.h"
-#include "SceneNode.h"
+#include "StencilNode.h"
 #include "Camera.h"
 
 class Renderer : public OGLRenderer	{
@@ -17,6 +17,9 @@ public:
 	void ToggleAlphaBlend();
 	void ToggleBlendMode();
 
+	void ToggleScissor();
+	void ToggleStencil();
+
 	void AttachSceneGraph(SceneNode* node) { root->AddChild(node); }
 
 	void ToggleDepth();
@@ -32,7 +35,10 @@ protected:
 	SceneNode* root;
 	Camera* camera;
 
-	bool depth;
-	bool alpha;
+	bool usingDepth;
+	bool usingAlpha;
 	int blendMode;
+	bool usingScissor;
+	bool usingStencil;
+
 };

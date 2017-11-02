@@ -40,6 +40,9 @@ public:
 	virtual void Update(float msec);
 	virtual void Draw(const OGLRenderer &renderer);
 
+	virtual void ActivateSpecialSettings() {}
+	virtual void DeactivateSpecialSettings() {}
+
 	inline std::vector<SceneNode*>::const_iterator GetChildIteratorStart()	{ return children.begin(); }
 	inline std::vector<SceneNode*>::const_iterator GetChildIteratorEnd()	{ return children.end(); }
 
