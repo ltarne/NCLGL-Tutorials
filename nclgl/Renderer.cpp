@@ -45,6 +45,33 @@ void Renderer::SwitchToOrthographic() {
 	projMatrix = Matrix4::Orthographic(-1.0f, 10000.0f, width / 2.0f, -width / 2.0f, height / 2.0f, -height / 2.0f);
 }
 
+void Renderer::ToggleAlphaBlend() {
+	alpha = !alpha;
+	alpha ? glEnable(GL_BLEND) : glDisable(GL_BLEND);
+}
+
+void Renderer::ToggleBlendMode() {
+	blendMode = (blendMode + 1) % 4;
+
+	switch (blendMode) {
+	case(0):
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		break;
+
+	case(1):
+		glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
+		break;
+
+	case(2):
+		glBlendFunc(GL_ONE, GL_ZERO);
+		break;
+
+	case(3):
+		glBlendFunc(GL_SRC_ALPHA, GL_ALPHA);
+		break;
+	}
+}
+
 void Renderer::ToggleDepth() {
 	depth = !depth;
 	depth ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);

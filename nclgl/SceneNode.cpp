@@ -6,8 +6,8 @@ SceneNode::SceneNode(Shader* shader, Mesh * mesh, Vector4 colour) {
 	this->mesh		= mesh;
 	this->colour	= colour;
 	parent			= NULL;
-	transform	= Matrix4::Translation(Vector3(0,0,0));
-	rotation	= Matrix4::Rotation(180.0f, Vector3(0, 1, 0));
+	transform	= Matrix4();
+	rotation	= Matrix4();
 	scale		= Matrix4::Scale(Vector3(1, 1, 1));
 
 }

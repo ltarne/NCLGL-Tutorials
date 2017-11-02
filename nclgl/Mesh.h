@@ -15,6 +15,10 @@ public:
 
 	static Mesh* GenerateTriangle();
 
+	static Mesh* GenerateQuad();
+
+	static Mesh* GenerateQuadPatch();
+
 	inline void SetTexture(GLuint texture) { this->texture = texture; }
 	inline GLuint GetTexture() { return texture; }
 

@@ -14,6 +14,9 @@ public:
 	void SwitchToPerspective();
 	void SwitchToOrthographic();
 
+	void ToggleAlphaBlend();
+	void ToggleBlendMode();
+
 	void AttachSceneGraph(SceneNode* node) { root->AddChild(node); }
 
 	void ToggleDepth();
@@ -30,4 +33,6 @@ protected:
 	Camera* camera;
 
 	bool depth;
+	bool alpha;
+	int blendMode;
 };
