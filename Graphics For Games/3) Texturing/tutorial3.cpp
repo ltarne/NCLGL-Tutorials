@@ -21,7 +21,6 @@ int main() {
 
 	SceneNode* triangle = new SceneNode(triangleShader, Mesh::GenerateTriangle());
 	
-	//triangle->GetMesh()->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"brick.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0));
 	triangle->SetTexture(brick);
 
 	renderer.AttachSceneGraph(triangle);
@@ -30,23 +29,19 @@ int main() {
 	while(w.UpdateWindow() && !Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE)){
 		if(Window::GetKeyboard()->KeyDown(KEYBOARD_LEFT) ) {
 			--rotate;
-			//renderer.UpdateTextureMatrix(rotate);
 			triangle->GetTexture()->RotateMatrix(rotate);
 		}
 
 		if(Window::GetKeyboard()->KeyDown(KEYBOARD_RIGHT) ) {
 			++rotate;
-			//renderer.UpdateTextureMatrix(rotate);
 			triangle->GetTexture()->RotateMatrix(rotate);
 		}
 
 		if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_1) ) {
-			//renderer.ToggleFiltering();
 			triangle->GetTexture()->ToggleFiltering();
 		}
 
 		if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_2) ) {
-			//renderer.ToggleRepeating();
 			triangle->GetTexture()->ToggleRepeating();
 		}
 
