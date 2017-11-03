@@ -1,5 +1,5 @@
 #include "../../nclgl/window.h"
-#include "Renderer.h"
+#include "../../nclgl/Renderer.h"
 
 #pragma comment(lib, "nclgl.lib")
 

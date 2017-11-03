@@ -34,7 +34,17 @@ public:
 	inline Texture*	GetTexture() { return texture; }
 
 	inline void SetVisible(bool visible) { this->visible = visible; }
-	inline bool GetVisible() { return visible; }
+	inline bool GetVisible() const { return visible; }
+
+	inline float GetBoundingRadius() const { return boundingRadius; }
+	inline void SetBoundingRadius(float boundingRadius) { this->boundingRadius = boundingRadius; }
+
+	inline float GetCameraDistance() const { return distanceFromCamera; }
+	inline void SetCameraDistance(float distance) { this->distanceFromCamera = distance; }
+
+	static bool CompareByCameraDistance(SceneNode* a, SceneNode* b) {
+		return (a->distanceFromCamera < b->distanceFromCamera) ? true : false;
+	}
 
 	void LoadUniforms();
 
@@ -61,6 +71,9 @@ protected:
 	Mesh* mesh;
 	Texture* texture;
 	Vector4 colour;
+
+	float distanceFromCamera;
+	float boundingRadius;
 
 	bool visible;
 	

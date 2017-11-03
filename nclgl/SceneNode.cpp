@@ -5,11 +5,16 @@ SceneNode::SceneNode(Shader* shader, Mesh * mesh, Vector4 colour) {
 	this->shader	= shader;
 	this->mesh		= mesh;
 	this->colour	= colour;
+
 	parent			= NULL;
 	transform	= Matrix4();
 	rotation	= Matrix4();
 	scale		= Matrix4::Scale(Vector3(1, 1, 1));
+
 	visible = true;
+
+	boundingRadius = 1.0f;
+	distanceFromCamera = 0.0f;
 
 }
 

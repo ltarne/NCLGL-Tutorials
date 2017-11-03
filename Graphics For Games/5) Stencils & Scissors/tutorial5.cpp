@@ -9,6 +9,9 @@ int main() {
 	if(!w.HasInitialised()) {
 		return -1;
 	}
+
+	w.LockMouseToWindow(true);
+	w.ShowOSPointer(false);
 	
 	Renderer renderer(w);	//This handles all the boring OGL 3.2 initialisation stuff, and sets up our tutorial!
 	if(!renderer.HasInitialised()) {
