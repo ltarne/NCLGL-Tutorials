@@ -33,6 +33,9 @@ public:
 	}
 	inline Texture*	GetTexture() { return texture; }
 
+	inline void SetVisible(bool visible) { this->visible = visible; }
+	inline bool GetVisible() { return visible; }
+
 	void LoadUniforms();
 
 	void AddChild(SceneNode* child);
@@ -40,8 +43,6 @@ public:
 	virtual void Update(float msec);
 	virtual void Draw(const OGLRenderer &renderer);
 
-	virtual void ActivateSpecialSettings() {}
-	virtual void DeactivateSpecialSettings() {}
 
 	inline std::vector<SceneNode*>::const_iterator GetChildIteratorStart()	{ return children.begin(); }
 	inline std::vector<SceneNode*>::const_iterator GetChildIteratorEnd()	{ return children.end(); }
@@ -60,6 +61,8 @@ protected:
 	Mesh* mesh;
 	Texture* texture;
 	Vector4 colour;
+
+	bool visible;
 	
 };
 

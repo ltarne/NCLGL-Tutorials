@@ -34,6 +34,7 @@ void Renderer::UpdateScene(float msec) {
 
 void Renderer::RenderScene()	{
 	glClearColor(0.2f,0.2f,0.2f,1.0f);
+	glScissor(0, 0, width, height);//Sets the scissor region to the whole screen before the clear
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);	
 
 	if (usingScissor) {
@@ -42,21 +43,9 @@ void Renderer::RenderScene()	{
 			(float)width / 5.0f, (float)height / 5.0f);
 	}
 
-	/*if (usingStencil) {
-		
-
-		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-		glStencilFunc(GL_ALWAYS, 2, ~0);
-		glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
-	}*/
 
 	DrawNode(root);
 
-	/*if (usingStencil) {
-		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-		glStencilFunc(GL_EQUAL, 2, ~0);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-	}*/
 	
 	SwapBuffers();	
 }
@@ -116,24 +105,17 @@ void Renderer::DrawNode(SceneNode* node) {
 	glUseProgram(node->GetShader()->GetProgram());
 	UpdateShaderMatrices(node->GetShader());
 
-	if (usingStencil) {
-		node->ActivateSpecialSettings();
-	}
+	if (node->GetVisible()) {
 
-	if (node->GetMesh()) {
-		node->Draw(*this);
-	}
-
-	if (usingStencil) {
-		node->DeactivateSpecialSettings();
+		if (node->GetMesh()) {
+			node->Draw(*this);
+		}
 	}
 
 	glUseProgram(0);
 
 	for (vector<SceneNode*>::const_iterator i = node->GetChildIteratorStart(); i != node->GetChildIteratorEnd(); ++i) {
-		//Might be useful at some point to have a function to change opengl settings based on a nodes particular needs
 		DrawNode(*i);
-		//Which could then be reverted in another function
 	}
 }
 

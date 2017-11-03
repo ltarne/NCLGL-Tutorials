@@ -30,9 +30,13 @@ int main() {
 	StencilNode* square = new StencilNode(triangleShader, squareMesh);
 	square->SetTransform(Matrix4::Translation(Vector3(0.0f, 0.0f, 0.0f)));
 	square->SetTexture(chessboard);
+	square->SetVisible(false);
 
-	renderer.AttachSceneGraph(triangle);
 	renderer.AttachSceneGraph(square);
+	renderer.AttachSceneGraph(triangle);
+	
+
+	renderer.ToggleDepth();
 
 	while(w.UpdateWindow() && !Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE)){
 		if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_1)) {
@@ -40,6 +44,7 @@ int main() {
 		}
 		if(Window::GetKeyboard()->KeyTriggered(KEYBOARD_2)) {
 			renderer.ToggleStencil();
+			square->SetVisible(!square->GetVisible());
 		}
 
 		renderer.UpdateScene(w.GetTimer()->GetTimedMS());

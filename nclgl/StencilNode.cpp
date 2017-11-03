@@ -12,14 +12,21 @@ StencilNode::~StencilNode()
 {
 }
 
-void StencilNode::ActivateSpecialSettings() {
+void StencilNode::Draw(const OGLRenderer & renderer) {
+	LoadUniforms();
+	glDepthMask(GL_FALSE);
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	glStencilFunc(GL_ALWAYS, 2, ~0);
 	glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
-}
 
-void StencilNode::DeactivateSpecialSettings() {
+	if (mesh != nullptr) {
+		mesh->Draw();
+	}
+
+	glDepthMask(GL_TRUE);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	glStencilFunc(GL_EQUAL, 2, ~0);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 }
+
+

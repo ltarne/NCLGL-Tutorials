@@ -9,6 +9,7 @@ SceneNode::SceneNode(Shader* shader, Mesh * mesh, Vector4 colour) {
 	transform	= Matrix4();
 	rotation	= Matrix4();
 	scale		= Matrix4::Scale(Vector3(1, 1, 1));
+	visible = true;
 
 }
 
