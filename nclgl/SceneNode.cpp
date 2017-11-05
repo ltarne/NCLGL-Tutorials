@@ -5,6 +5,7 @@ SceneNode::SceneNode(Shader* shader, Mesh * mesh, Vector4 colour) {
 	this->shader	= shader;
 	this->mesh		= mesh;
 	this->colour	= colour;
+	this->texture = nullptr;
 
 	parent			= NULL;
 	transform	= Matrix4();
@@ -34,9 +35,11 @@ void SceneNode::LoadUniforms() {
 	//Transform
 	glUniformMatrix4fv(glGetUniformLocation(shader->GetProgram(), "modelMatrix"), 1, false, (float*)&worldTransform);
 
-	//Texture Matrix
-	glUniformMatrix4fv(glGetUniformLocation(shader->GetProgram(), "textureMatrix"), 1, false, (float*)&texture->GetTextureMatrix());
-
+	if (texture) {
+		//Texture Matrix
+		glUniformMatrix4fv(glGetUniformLocation(shader->GetProgram(), "textureMatrix"), 1, false, (float*)&texture->GetTextureMatrix());
+	}
+	
 	//Colour
 	glUniform4fv(glGetUniformLocation(shader->GetProgram(), "nodeColour"), 1, (float*)&colour);
 }

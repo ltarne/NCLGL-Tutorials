@@ -13,6 +13,7 @@ public:
 	inline Matrix4			GetWorldTransform()				const	{ return worldTransform; }
 
 	inline void		SetScale(Matrix4 scale) { this->scale = scale; }
+	inline void		SetScale(Vector3 scale) { this->scale = Matrix4::Scale(scale); }
 	inline Matrix4	GetScale()			 const { return scale; }
 
 	inline void		SetRotation(Matrix4 rotation) { this->rotation = rotation; }

@@ -5,6 +5,7 @@ Texture::Texture(string filePath) {
 	texture = SOIL_load_OGL_texture(filePath.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
 	repeating = false;
 	filtering = false;
+	textureMatrix = Matrix4();
 }
 
 Texture::~Texture() {

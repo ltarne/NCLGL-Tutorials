@@ -2,13 +2,6 @@
 
 
 
-Frustum::Frustum() {
-}
-
-
-Frustum::~Frustum() {
-}
-
 void Frustum::FromMatrix(const Matrix4 & mvp) {
 	Vector3 xAxis = Vector3(mvp.values[0], mvp.values[4], mvp.values[8]);
 	Vector3 yAxis = Vector3(mvp.values[1], mvp.values[5], mvp.values[9]);
