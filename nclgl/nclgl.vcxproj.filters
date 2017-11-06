@@ -26,6 +26,7 @@
     <ClCompile Include="StencilNode.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Frustum.cpp" />
+    <ClCompile Include="HeightMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -65,6 +66,7 @@
     <ClInclude Include="StencilNode.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Frustum.h" />
+    <ClInclude Include="HeightMap.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Data Types">

@@ -11,6 +11,8 @@ Mesh::Mesh() {
 
 	numVertices		= 0;
 	vertices		= NULL;
+	numIndices		= 0;
+	indices			= NULL;
 	colours			= NULL;
 	texture			= 0;
 	textureCoords	= NULL;
@@ -27,6 +29,7 @@ Mesh::~Mesh() {
 	delete[] textureCoords;
 
 	delete[] vertices;
+	delete[] indices;
 	delete[] colours;
 }
 
@@ -34,8 +37,16 @@ void Mesh::Draw() {
 	//Work on this array object
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glBindVertexArray(arrayObject);
+
 	//Draw
-	glDrawArrays(type, 0, numVertices);
+	if (bufferObject[INDEX_BUFFER]) {
+		glDrawElements(type, numIndices, GL_UNSIGNED_INT, 0);
+	}
+	else {
+		glDrawArrays(type, 0, numVertices);
+	}
+	
+	
 	//Stop working on this array object
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -93,8 +104,28 @@ Mesh * Mesh::GenerateQuad() {
 
 Mesh * Mesh::GenerateQuadPatch()
 {
-	Mesh* m = GenerateQuad();
+	Mesh* m = new Mesh();
+	m->numVertices = 4;
 	m->type = GL_PATCHES;
+
+	m->vertices = new Vector3[m->numVertices];
+	m->vertices[0] = Vector3(-1.0f, -1.0f, 0.0f);
+	m->vertices[1] = Vector3(-1.0f, 1.0f, 0.0f);
+	m->vertices[2] = Vector3(1.0f, -1.0f, 0.0f);
+	m->vertices[3] = Vector3(1.0f, 1.0f, 0.0f);
+
+	m->textureCoords = new Vector2[m->numVertices];
+	m->textureCoords[0] = Vector2(0.0f, 1.0f);
+	m->textureCoords[1] = Vector2(0.0f, 0.0f);
+	m->textureCoords[2] = Vector2(1.0f, 1.0f);
+	m->textureCoords[3] = Vector2(1.0f, 0.0f);
+
+	m->colours = new Vector4[m->numVertices];
+	for (int i = 0; i < m->numVertices; ++i) {
+		m->colours[i] = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	m->BufferData();
 	return m;
 }
 
@@ -128,6 +159,13 @@ void Mesh::BufferData() {
 		glVertexAttribPointer(COLOUR_BUFFER, 4, GL_FLOAT, GL_FALSE, 0, 0);
 		glEnableVertexAttribArray(COLOUR_BUFFER);
 	}
+
+	if (indices) {
+		glGenBuffers(1, &bufferObject[INDEX_BUFFER]);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObject[INDEX_BUFFER]);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(GLuint), indices, GL_STATIC_DRAW);
+	}
+
 	//Stop working on this vertex array
 	glBindVertexArray(0);
 
