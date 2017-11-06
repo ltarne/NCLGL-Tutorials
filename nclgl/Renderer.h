@@ -2,6 +2,8 @@
 #include "OGLRenderer.h"
 #include "StencilNode.h"
 #include "Camera.h"
+#include "Frustum.h"
+#include <algorithm>
 
 class Renderer : public OGLRenderer	{
 public:
@@ -28,12 +30,19 @@ public:
 	void SetScale(float scale) { root->SetScale(Matrix4::Scale(Vector3(scale,scale,scale))); }
 	void SetPosition(Vector3 position) { root->SetTransform(Matrix4::Translation(position)); }
 
-protected:
+	
 
+
+protected:
+	void BuildNodeLists(SceneNode* from);
+	void SortNodeLists();
+	void ClearNodeLists();
+	void DrawNodes();
 	void DrawNode(SceneNode* node);
 
 	SceneNode* root;
 	Camera* camera;
+	Frustum frameFrustrum;
 
 	bool usingDepth;
 	bool usingAlpha;
@@ -41,4 +50,7 @@ protected:
 	bool usingScissor;
 	bool usingStencil;
 
+
+	vector<SceneNode*> transparentNodeList;
+	vector<SceneNode*> nodeList;
 };

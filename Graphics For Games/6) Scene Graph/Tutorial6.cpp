@@ -18,11 +18,13 @@ int main() {
 	w.LockMouseToWindow(true);
 	w.ShowOSPointer(false);
 
-	Shader* shader = new Shader(SHADERDIR"basicVert.vert", SHADERDIR"basicFrag.frag");
+	Shader* shader = new Shader(SHADERDIR"sceneVert.vert", SHADERDIR"sceneFrag.frag");
 	shader->LinkProgram();
 
 	CubeRobot::CreateCube();
 	CubeRobot* cubeRobot = new CubeRobot(shader);
+	cubeRobot->SetTransform(Matrix4::Translation(Vector3(0, 0, -10)));
+	//cubeRobot->SetScale(Vector3(0.01, 0.01, 0.01));
 
 	renderer.AttachSceneGraph(cubeRobot);
 

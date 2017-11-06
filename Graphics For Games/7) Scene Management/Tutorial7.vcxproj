@@ -70,7 +70,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\6) Scene Graph\CubeRobot.cpp" />
     <ClCompile Include="Tutorial7.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\6) Scene Graph\CubeRobot.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

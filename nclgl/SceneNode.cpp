@@ -9,7 +9,7 @@ SceneNode::SceneNode(Shader* shader, Mesh * mesh, Vector4 colour) {
 
 	parent			= NULL;
 	transform	= Matrix4();
-	rotation	= Matrix4();
+	rotation	= Matrix4::Rotation(0.0f, Vector3(0,0,0));
 	scale		= Matrix4::Scale(Vector3(1, 1, 1));
 
 	visible = true;
@@ -33,12 +33,16 @@ void SceneNode::LoadUniforms() {
 	
 
 	//Transform
-	glUniformMatrix4fv(glGetUniformLocation(shader->GetProgram(), "modelMatrix"), 1, false, (float*)&worldTransform);
+	Matrix4 modelMatrix = worldTransform * scale;
+	glUniformMatrix4fv(glGetUniformLocation(shader->GetProgram(), "modelMatrix"), 1, false, (float*)&modelMatrix);
+
 
 	if (texture) {
 		//Texture Matrix
 		glUniformMatrix4fv(glGetUniformLocation(shader->GetProgram(), "textureMatrix"), 1, false, (float*)&texture->GetTextureMatrix());
 	}
+	glUniform1i(glGetUniformLocation(shader->GetProgram(), "useTexture"), texture ? true : false);
+	
 	
 	//Colour
 	glUniform4fv(glGetUniformLocation(shader->GetProgram(), "nodeColour"), 1, (float*)&colour);
@@ -50,12 +54,11 @@ void SceneNode::AddChild(SceneNode* child) {
 }
 
 void SceneNode::Update(float msec) {
-	transform = transform * rotation * scale;
 	if (parent) {
-		worldTransform = parent->worldTransform * transform;
+		worldTransform = parent->worldTransform * (transform * rotation);
 	}
 	else {
-		worldTransform = transform;
+		worldTransform = (transform * rotation);
 	}
 	for (vector<SceneNode*>::iterator i = children.begin(); i != children.end(); ++i) {
 		(*i)->Update(msec);
@@ -63,8 +66,12 @@ void SceneNode::Update(float msec) {
 }
 
 void SceneNode::Draw(const OGLRenderer &renderer) {
+
+
 	LoadUniforms();
 	
+	
+
 	if (mesh != nullptr) {
 		mesh->Draw();
 	}

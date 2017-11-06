@@ -1,5 +1,6 @@
 #include "../../nclgl/window.h"
 #include "../../nclgl/Renderer.h"
+#include "../6) Scene Graph/CubeRobot.h"
 
 #pragma comment(lib, "nclgl.lib")
 
@@ -17,10 +18,22 @@ int main() {
 	w.LockMouseToWindow(true);
 	w.ShowOSPointer(false);
 
+	Shader* shader = new Shader(SHADERDIR"sceneVert.vert", SHADERDIR"sceneFrag.frag");
+	shader->LinkProgram();
+
+	CubeRobot::CreateCube();
+	CubeRobot* cubeRobot = new CubeRobot(shader);
+	cubeRobot->SetTransform(Matrix4::Translation(Vector3(0, 0, -10)));
+
+	renderer.AttachSceneGraph(cubeRobot);
+
 	while(w.UpdateWindow() && !Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE)){
 		renderer.UpdateScene(w.GetTimer()->GetTimedMS());
 		renderer.RenderScene();
 	}
+
+	delete shader;
+	CubeRobot::DeleteCube();
 
 	return 0;
 }

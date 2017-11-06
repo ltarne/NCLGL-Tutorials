@@ -9,12 +9,12 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)	{
 
 	root = new SceneNode(debugDrawShader);
 
-
+	glEnable(GL_DEPTH_TEST);
 	//glDisable(GL_CULL_FACE);
 
 	init = true;
 
-	usingDepth = false;
+	usingDepth = true;
 	usingAlpha = false;
 	blendMode = 0;
 	usingScissor = false;
@@ -28,11 +28,15 @@ Renderer::~Renderer(void)	{
 void Renderer::UpdateScene(float msec) {
 	camera->UpdateCamera(msec);
 	viewMatrix = camera->BuildViewMatrix();
+	frameFrustrum.FromMatrix(projMatrix * viewMatrix);
 
 	root->Update(msec);
 }
 
 void Renderer::RenderScene()	{
+	BuildNodeLists(root);
+	SortNodeLists();
+
 	glClearColor(0.2f,0.2f,0.2f,1.0f);
 	glScissor(0, 0, width, height);//Sets the scissor region to the whole screen before the clear
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);	
@@ -44,10 +48,11 @@ void Renderer::RenderScene()	{
 	}
 
 
-	DrawNode(root);
+	DrawNodes();
 
 	
 	SwapBuffers();	
+	ClearNodeLists();
 }
 
 void Renderer::SwitchToPerspective() {
@@ -101,21 +106,62 @@ void Renderer::ToggleDepth() {
 	usingDepth ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
 }
 
-void Renderer::DrawNode(SceneNode* node) {
-	glUseProgram(node->GetShader()->GetProgram());
-	UpdateShaderMatrices(node->GetShader());
+void Renderer::BuildNodeLists(SceneNode * from) {
+	if (frameFrustrum.InsideFrustrum(*from)) {
+		Vector3 dir = from->GetWorldTransform().GetPositionVector() - camera->GetPosition();
 
-	if (node->GetVisible()) {
+		from->SetCameraDistance(Vector3::Dot(dir, dir));
 
-		if (node->GetMesh()) {
-			node->Draw(*this);
+		if (from->GetColour().w < 1.0f) {
+			transparentNodeList.push_back(from);
+		}
+		else {
+			nodeList.push_back(from);
 		}
 	}
 
-	glUseProgram(0);
-
-	for (vector<SceneNode*>::const_iterator i = node->GetChildIteratorStart(); i != node->GetChildIteratorEnd(); ++i) {
-		DrawNode(*i);
+	for (vector<SceneNode*>::const_iterator i = from->GetChildIteratorStart(); i != from->GetChildIteratorEnd(); ++i) {
+		BuildNodeLists((*i));
 	}
+}
+
+void Renderer::SortNodeLists() {
+	sort(transparentNodeList.begin(), transparentNodeList.end(), SceneNode::CompareByCameraDistance);
+
+	sort(nodeList.begin(), nodeList.end(), SceneNode::CompareByCameraDistance);
+}
+
+void Renderer::ClearNodeLists() {
+	transparentNodeList.clear();
+	nodeList.clear();
+}
+
+void Renderer::DrawNodes() {
+	for (vector<SceneNode*>::const_iterator i = nodeList.begin(); i != nodeList.end(); ++i) {
+		DrawNode((*i));
+	}
+
+	for (vector<SceneNode*>::const_reverse_iterator i = transparentNodeList.rbegin(); i != transparentNodeList.rend(); ++i) {
+		DrawNode((*i));
+	}
+}
+
+void Renderer::DrawNode(SceneNode* node) {
+	
+
+	if (node->GetVisible() && node->GetMesh()) {
+		glUseProgram(node->GetShader()->GetProgram());
+		UpdateShaderMatrices(node->GetShader());
+
+		node->Draw(*this);
+
+		glUseProgram(0);
+	}
+
+	
+
+	/*for (vector<SceneNode*>::const_iterator i = node->GetChildIteratorStart(); i != node->GetChildIteratorEnd(); ++i) {
+		DrawNode(*i);
+	}*/
 }
 

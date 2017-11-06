@@ -2,9 +2,11 @@
 
 in  vec3 position;
 in  vec4 colour;
+in  vec2 texCoord;
 
 out Vertex {
 	vec4 colour;
+	vec2 texCoord;
 } OUT;
 
 

@@ -12,19 +12,19 @@ void Frustum::FromMatrix(const Matrix4 & mvp) {
 	planes[0] = Plane(wAxis - xAxis, mvp.values[15] - mvp.values[12], true);
 
 	//Left
-	planes[1] = Plane(wAxis - xAxis, mvp.values[15] + mvp.values[12], true);
+	planes[1] = Plane(wAxis + xAxis, mvp.values[15] + mvp.values[12], true);
 
 	//Bottom
-	planes[2] = Plane(wAxis - xAxis, mvp.values[15] + mvp.values[13], true);
+	planes[2] = Plane(wAxis + yAxis, mvp.values[15] + mvp.values[13], true);
 
 	//Top
-	planes[3] = Plane(wAxis - xAxis, mvp.values[15] - mvp.values[13], true);
+	planes[3] = Plane(wAxis - yAxis, mvp.values[15] - mvp.values[13], true);
 
 	//Far
-	planes[4] = Plane(wAxis - xAxis, mvp.values[15] - mvp.values[14], true);
+	planes[4] = Plane(wAxis - zAxis, mvp.values[15] - mvp.values[14], true);
 
 	//Near
-	planes[5] = Plane(wAxis - xAxis, mvp.values[15] + mvp.values[14], true);
+	planes[5] = Plane(wAxis + zAxis, mvp.values[15] + mvp.values[14], true);
 }
 
 bool Frustum::InsideFrustrum(SceneNode & node) {

@@ -68,10 +68,10 @@ protected:
 	Matrix4 rotation;
 	Matrix4 scale;
 
-	Shader* shader;
-	Mesh* mesh;
-	Texture* texture;
-	Vector4 colour;
+	Shader*		shader;
+	Mesh*		mesh;
+	Texture*	texture;
+	Vector4		colour;
 
 	float distanceFromCamera;
 	float boundingRadius;

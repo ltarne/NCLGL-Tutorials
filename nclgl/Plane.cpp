@@ -16,7 +16,7 @@ Plane::Plane(const Vector3 & normal, float distance, bool normalise) {
 }
 
 bool Plane::SphereInPlane(const Vector3 & position, float radius) const {
-	if (Vector3::Dot(position, normal) + distance <= radius) {
+	if (Vector3::Dot(position, normal) + distance <= -radius) {
 		return false;
 	}
 	return true;

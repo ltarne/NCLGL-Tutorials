@@ -2,5 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Tutorial7.cpp" />
+    <ClCompile Include="..\6) Scene Graph\CubeRobot.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\6) Scene Graph\CubeRobot.h" />
   </ItemGroup>
 </Project>

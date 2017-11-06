@@ -1,6 +1,8 @@
 #version 330 core
 
 uniform sampler2D tex;
+uniform bool useTexture;
+
 
 in Vertex	{
 	vec4 colour;
@@ -11,6 +13,9 @@ out vec4 fragColor;
 
 
 void main(void)	{
-	//fragColor = vec4(1.0, 0.41, 0.71, 1.0);
-	fragColor = texture(tex, IN.texCoord);
+	fragColor = IN.colour;
+
+	if(useTexture) {
+		fragColor *= texture(tex, IN.texCoord);
+	}
 }
