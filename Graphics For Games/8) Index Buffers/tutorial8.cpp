@@ -18,12 +18,12 @@ int main() {
 	w.LockMouseToWindow(true);
 	w.ShowOSPointer(false);
 
-	Shader* shader = new Shader(SHADERDIR"sceneVert.vert", SHADERDIR"sceneFrag.frag");
+	Shader* shader = new Shader(SHADERDIR"sceneVert.vert", SHADERDIR"heightMapFrag.frag");
 	shader->LinkProgram();
 
 	HeightMap* heightMap = new HeightMap(TEXTUREDIR "terrain.raw");
 
-	SceneNode* node = new SceneNode(shader, heightMap);
+	SceneNode* node = new SceneNode(shader, heightMap, Vector4(0,1,0,1));
 	Texture* tex = new Texture(TEXTUREDIR "Barren Reds.JPG");
 	tex->ToggleRepeating();
 	node->SetTexture(tex);

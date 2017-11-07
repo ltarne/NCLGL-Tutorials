@@ -5,7 +5,7 @@
 class SceneNode
 {
 public:
-	SceneNode(Shader* shader, Mesh* mesh = nullptr, Vector4 colour = Vector4(1,1,1,1));
+	SceneNode(Shader* shader = nullptr, Mesh* mesh = nullptr, Vector4 colour = Vector4(1,1,1,1));
 	~SceneNode();
 
 	inline void			SetTransform(const Matrix4 &transform)	{ this->transform = transform; }

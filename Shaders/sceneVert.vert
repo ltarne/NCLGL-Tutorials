@@ -10,6 +10,7 @@ in  vec4 colour;
 in  vec2 texCoord;
 
 out Vertex {
+	vec3 position;
 	vec4 colour;
 	vec2 texCoord;
 } OUT;
@@ -19,6 +20,7 @@ out Vertex {
 void main(void)	{
 
 	gl_Position	  = (projMatrix * viewMatrix * modelMatrix) * vec4(position, 1.0);
+	OUT.position = position;
 	OUT.colour    = nodeColour;
 	OUT.texCoord 	= texCoord;
 }

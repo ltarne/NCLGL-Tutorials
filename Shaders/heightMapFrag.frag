@@ -15,6 +15,7 @@ out vec4 fragColor;
 
 void main(void)	{
 	fragColor = IN.colour;
+	fragColor.r = (100 / IN.position.y) * 100;
 
 	if(useTexture) {
 		fragColor *= texture(tex, IN.texCoord);

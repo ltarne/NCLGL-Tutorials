@@ -82,8 +82,8 @@ void	MD5Node::Draw(const OGLRenderer &r) {
 	sourceData.BindTextureBuffers();
 	sourceData.UpdateTransformTBO(currentSkeleton);
 
-	glUniform1i(glGetUniformLocation(r.GetCurrentShader()->GetProgram(), "weightTex"), MD5_WEIGHT_TEXNUM);
-	glUniform1i(glGetUniformLocation(r.GetCurrentShader()->GetProgram(), "transformTex"), MD5_TRANSFORM_TEXNUM);
+	glUniform1i(glGetUniformLocation(shader->GetProgram(), "weightTex"), MD5_WEIGHT_TEXNUM);
+	glUniform1i(glGetUniformLocation(shader->GetProgram(), "transformTex"), MD5_TRANSFORM_TEXNUM);
 #else 
 	/*
 	If we're doing 'software' skinning, then we need to make sure the global mesh

@@ -3,6 +3,7 @@
 #include "StencilNode.h"
 #include "Camera.h"
 #include "Frustum.h"
+#include "MD5Node.h"
 #include <algorithm>
 
 class Renderer : public OGLRenderer	{
