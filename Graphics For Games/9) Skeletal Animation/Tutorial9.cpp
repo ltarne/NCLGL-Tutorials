@@ -18,23 +18,29 @@ int main() {
 	w.ShowOSPointer(false);
 
 	Shader* shader = new Shader(SHADERDIR"skeletonVertex.glsl", SHADERDIR"skeletonFrag.frag");
+	Shader* triangleShader = new Shader(SHADERDIR"sceneVert.vert", SHADERDIR"sceneFrag.frag");
+	triangleShader->LinkProgram();
 	//Shader* shader = new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
 	if (!shader->LinkProgram()) {
 		return-1;
 	}
 
 	MD5FileData*	hellData = new MD5FileData(MESHDIR"hellknight.md5mesh");
+	SceneNode* parentNode = new SceneNode(triangleShader, Mesh::GenerateTriangle());
+
+
 	MD5Node*		hellNode = new MD5Node(*hellData);
+	parentNode->AddChild(hellNode);
 	hellNode->SetShader(shader);
 	hellNode->SetBoundingRadius(1000.0f);
 	/*hellData->AddAnim(MESHDIR"idle2.md5anim");
 	hellNode->PlayAnim(MESHDIR"idle2.md5anim");*/
 
-	hellData->AddAnim(MESHDIR"attack2.md5anim");
-	hellNode->PlayAnim(MESHDIR"attack2.md5anim");
-	hellNode->SetTransform(Matrix4::Translation(Vector3(0.0f, -10.0f, -10.0f)));
+	hellData->AddAnim(MESHDIR"walk7.md5anim");
+	hellNode->PlayAnim(MESHDIR"walk7.md5anim");
+	parentNode->SetTransform(Matrix4::Translation(Vector3(0.0f, -10.0f, -10.0f)));
 
-	renderer.AttachSceneGraph(hellNode);
+	renderer.AttachSceneGraph(parentNode);
 	Vector3 position = Vector3(0.0f, 0.0f, -10.0f);
 
 	while(w.UpdateWindow() && !Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE)){
@@ -44,7 +50,7 @@ int main() {
 		else if (Window::GetKeyboard()->KeyDown(KEYBOARD_UP)) {
 			position.z -= 0.5f;
 		}
-		hellNode->SetTransform(Matrix4::Translation(position));
+		parentNode->SetTransform(Matrix4::Translation(position));
 		renderer.UpdateScene(w.GetTimer()->GetTimedMS());
 		renderer.RenderScene();
 	}
