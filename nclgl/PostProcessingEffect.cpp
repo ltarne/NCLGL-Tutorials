@@ -55,6 +55,7 @@ PostProcessingEffect::~PostProcessingEffect() {
 
 void PostProcessingEffect::Draw() {
 	glBindFramebuffer(GL_FRAMEBUFFER, processFBO);
+	glUseProgram(processShader->GetProgram());
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[1], 0);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
@@ -70,6 +71,13 @@ void PostProcessingEffect::Draw() {
 
 		glUniform1i(glGetUniformLocation(processShader->GetProgram(), "isVertical"), 0);
 
+		quad->SetTexture(bufferColourTex[0]);
+		quad->Draw();
+
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[0], 0);
+
+		glUniform1i(glGetUniformLocation(processShader->GetProgram(), "isVertical"), 1);
+
 		quad->SetTexture(bufferColourTex[1]);
 		quad->Draw();
 	}
@@ -81,6 +89,8 @@ void PostProcessingEffect::Draw() {
 
 void PostProcessingEffect::Present() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glUseProgram(sceneShader->GetProgram());
+	glDisable(GL_DEPTH_TEST);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 	UpdateShaderMatrices(sceneShader);

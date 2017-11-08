@@ -10,12 +10,18 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)	{
 	root = new SceneNode(debugDrawShader);
 
 	glEnable(GL_DEPTH_TEST);
-	//glDisable(GL_CULL_FACE);
+	glDisable(GL_CULL_FACE);
 
-	Shader* processShader = new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"processFrag.frag");
-	processShader->LinkProgram();
-	Shader* sceneShader = new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFrag.glsl");
-	sceneShader->LinkProgram();
+	Shader* processShader = new Shader(SHADERDIR"sceneVert.vert", SHADERDIR"processFrag.frag");
+	if (!processShader->LinkProgram()) {
+		return;
+	}
+	
+	Shader* sceneShader = new Shader(SHADERDIR"sceneVert.vert", SHADERDIR"sceneFrag.frag");
+
+	if (!sceneShader->LinkProgram()) {
+		return;
+	}
 
 	/*quad = new SceneNode(processShader, Mesh::GenerateQuad());*/
 	PostProcessingEffect::GenerateQuad();
@@ -278,7 +284,7 @@ void Renderer::DrawScene() {
 	DrawNodes();
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	SwapBuffers();
+	//SwapBuffers();
 	ClearNodeLists();
 
 	

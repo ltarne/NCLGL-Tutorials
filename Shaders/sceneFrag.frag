@@ -1,7 +1,7 @@
 #version 330 core
 
 uniform sampler2D tex;
-uniform bool useTexture;
+//uniform bool useTexture;
 
 
 in Vertex	{
@@ -16,7 +16,8 @@ out vec4 fragColor;
 void main(void)	{
 	fragColor = IN.colour;
 
-	if(useTexture) {
-		fragColor *= texture(tex, IN.texCoord);
-	}
+	//if(useTexture) {
+		fragColor = texture(tex, IN.texCoord);
+		fragColor.a = 1;
+	//}
 }

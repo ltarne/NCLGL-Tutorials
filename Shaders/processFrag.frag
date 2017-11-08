@@ -16,6 +16,8 @@ const float weights[5] = float[](0.12, 0.22, 0.32, 0.22, 0.12);
 void main(void){
 	vec2 values[5];
 
+	fragColor = vec4(0.0, 0.0, 0.0, 1.0);
+
 	if(isVertical == 1) {
 		values = vec2[](vec2(0.0, -pixelSize.y*3),
 		vec2(0.0, -pixelSize.y*2), vec2(0.0, pixelSize.y),
