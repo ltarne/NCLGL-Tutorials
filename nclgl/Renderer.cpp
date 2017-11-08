@@ -12,6 +12,17 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)	{
 	glEnable(GL_DEPTH_TEST);
 	//glDisable(GL_CULL_FACE);
 
+	Shader* processShader = new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"processFrag.frag");
+	processShader->LinkProgram();
+	Shader* sceneShader = new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFrag.glsl");
+	sceneShader->LinkProgram();
+
+	/*quad = new SceneNode(processShader, Mesh::GenerateQuad());*/
+	PostProcessingEffect::GenerateQuad();
+	blur = new PostProcessingEffect(width, height, sceneShader, processShader);
+	
+	/*LoadPostProcessing();*/
+
 	init = true;
 
 	usingDepth = true;
@@ -23,6 +34,12 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)	{
 Renderer::~Renderer(void)	{
 	delete root;
 	delete camera;
+	PostProcessingEffect::DeleteQuad();
+
+	/*glDeleteTextures(2, bufferColourTex);
+	glDeleteTextures(1, &bufferDepthTex);
+	glDeleteFramebuffers(1, &bufferFBO);
+	glDeleteFramebuffers(1, &processFBO);*/
 }
 
 void Renderer::UpdateScene(float msec) {
@@ -53,6 +70,15 @@ void Renderer::RenderScene()	{
 	
 	SwapBuffers();	
 	ClearNodeLists();
+}
+
+void Renderer::RenderPPScene() {
+	DrawScene();
+	blur->Draw();
+	blur->Present();
+	/*DrawPostProcess();
+	PresentScene();*/
+	SwapBuffers();
 }
 
 void Renderer::SwitchToPerspective() {
@@ -105,6 +131,40 @@ void Renderer::ToggleDepth() {
 	usingDepth = !usingDepth;
 	usingDepth ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
 }
+
+//void Renderer::LoadPostProcessing() {
+//	glGenTextures(1, &bufferDepthTex);
+//	glBindTexture(GL_TEXTURE_2D, bufferDepthTex);
+//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+//
+//	for (int i = 0; i < 2; ++i) {
+//		glGenTextures(1, &bufferColourTex[i]);
+//		glBindTexture(GL_TEXTURE_2D, bufferColourTex[i]);
+//		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+//		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+//		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+//	}
+//
+//	glGenFramebuffers(1, &bufferFBO); //Render scene into this
+//	glGenFramebuffers(1, &processFBO); //Post processing in this
+//
+//	glBindFramebuffer(GL_FRAMEBUFFER, bufferFBO);
+//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, bufferDepthTex, 0);
+//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, bufferDepthTex, 0);
+//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[0], 0);
+//
+//	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE || !bufferDepthTex || !bufferColourTex[0]) {
+//		cout << "Framebuffer failed!\n";
+//		return;
+//	}
+//	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//}
 
 void Renderer::BuildNodeLists(SceneNode * from) {
 	if (frameFrustrum.InsideFrustrum(*from)) {
@@ -163,5 +223,64 @@ void Renderer::DrawNode(SceneNode* node) {
 	/*for (vector<SceneNode*>::const_iterator i = node->GetChildIteratorStart(); i != node->GetChildIteratorEnd(); ++i) {
 		DrawNode(*i);
 	}*/
+}
+
+//void Renderer::PresentScene() {
+//	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+//	
+//}
+//
+//void Renderer::DrawPostProcess() {
+//	glBindFramebuffer(GL_FRAMEBUFFER, processFBO);
+//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[1], 0);
+//	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+//
+//	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
+//	viewMatrix.ToIdentity();
+//	UpdateShaderMatrices(quad->GetShader());
+//	glDisable(GL_DEPTH_TEST);
+//
+//	glUniform2f(glGetUniformLocation(quad->GetShader()->GetProgram(), "pixelSize"), 1.0f / width, 1.0f / height);
+//
+//	for (int i = 0; i < POST_PASSES; ++i) {
+//		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[1], 0);
+//
+//		glUniform1i(glGetUniformLocation(quad->GetShader()->GetProgram(), "isVertical"), 0);
+//
+//		quad->GetMesh()->SetTexture(bufferColourTex[1]);
+//		quad->Draw(*this);
+//	}
+//
+//	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//	glUseProgram(0);
+//	glEnable(GL_DEPTH_TEST);
+//
+//}
+//
+void Renderer::DrawScene() {
+	
+	BuildNodeLists(root);
+	SortNodeLists();
+
+	glBindFramebuffer(GL_FRAMEBUFFER, blur->GetFrameBuffer());
+	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+	glScissor(0, 0, width, height);//Sets the scissor region to the whole screen before the clear
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	if (usingScissor) {
+
+		glScissor((float)width / 2.5f, (float)height / 2.5f,
+			(float)width / 5.0f, (float)height / 5.0f);
+	}
+
+
+	DrawNodes();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	SwapBuffers();
+	ClearNodeLists();
+
+	
 }
 
