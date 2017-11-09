@@ -9,8 +9,11 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)	{
 
 	root = new SceneNode(debugDrawShader);
 
+	light = new Light(Vector3(0, 500.0f, 0),
+		Vector4(0,1,1,1), (RAW_WIDTH*HEIGHTMAP_X) / 2.0f);
+
 	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	
 	LoadPostProcessing();
 
@@ -23,6 +26,7 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)	{
 	usingStencil = false;
 }
 Renderer::~Renderer(void)	{
+	delete light;
 	delete root;
 	delete camera;
 	PostProcessingEffect::DeleteQuad();
@@ -45,6 +49,7 @@ void Renderer::RenderScene()	{
 	
 	if (postProcessingList.size() > 0) {
 		glBindFramebuffer(GL_FRAMEBUFFER, FBInfo.bufferFBO);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, FBInfo.bufferColourTex[0], 0);
 		DrawScene();
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -189,6 +194,11 @@ void Renderer::DrawNode(SceneNode* node) {
 	if (node->GetVisible() && node->GetMesh()) {
 		glUseProgram(node->GetShader()->GetProgram());
 		UpdateShaderMatrices(node->GetShader());
+
+		if (light) {
+			SetShaderLight(*light, node->GetShader());
+			glUniform3fv(glGetUniformLocation(node->GetShader()->GetProgram(), "cameraPos"), 1, (float*)&camera->GetPosition());
+		}
 
 		node->Draw(*this);
 

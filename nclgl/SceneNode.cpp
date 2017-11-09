@@ -27,9 +27,9 @@ SceneNode::~SceneNode() {
 
 void SceneNode::LoadUniforms() {
 	//Texture Uniforms
-	/*glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, mesh->GetTexture());*/
 	glUniform1i(glGetUniformLocation(shader->GetProgram(), "tex"), 0);
+
+	glUniform1i(glGetUniformLocation(shader->GetProgram(), "bumpTex"), 1);
 	
 
 	//Transform

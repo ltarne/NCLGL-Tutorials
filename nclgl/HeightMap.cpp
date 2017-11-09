@@ -51,6 +51,8 @@ HeightMap::HeightMap(string name) {
 		}
 	}
 
+	GenerateNormals();
+	GenerateTangents();
 	BufferData();
 
 }

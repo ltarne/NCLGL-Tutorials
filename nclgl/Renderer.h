@@ -5,6 +5,7 @@
 #include "Frustum.h"
 #include "MD5Node.h"
 #include "PostProcessingEffect.h"
+#include "HeightMap.h"
 #include <algorithm>
 
 
@@ -56,7 +57,7 @@ protected:
 
 	FrameBufferInfo FBInfo;
 	
-
+	Light* light;
 	SceneNode* root;
 	Camera* camera;
 	Frustum frameFrustrum;

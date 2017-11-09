@@ -88,6 +88,7 @@ void PostProcessingEffect::Draw() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glUseProgram(0);
 	glEnable(GL_DEPTH_TEST);
+	std::swap(FBInfo->bufferColourTex[0],FBInfo->bufferColourTex[1]);
 }
 
 void PostProcessingEffect::DrawOnce() {
@@ -107,6 +108,7 @@ void PostProcessingEffect::DrawOnce() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glUseProgram(0);
 	glEnable(GL_DEPTH_TEST);
+	std::swap(FBInfo->bufferColourTex[0], FBInfo->bufferColourTex[1]);
 }
 
 void PostProcessingEffect::Present() {
@@ -116,7 +118,7 @@ void PostProcessingEffect::Present() {
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 	UpdateShaderMatrices(sceneShader);
-	quad->SetTexture(FBInfo->bufferColourTex[1]);
+	quad->SetTexture(FBInfo->bufferColourTex[0]);
 	quad->Draw();
 	glEnable(GL_DEPTH_TEST);
 	glUseProgram(0);

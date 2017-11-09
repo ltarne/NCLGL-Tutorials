@@ -34,6 +34,12 @@ public:
 	}
 	inline Texture*	GetTexture() { return texture; }
 
+	inline void		SetBumpTexture(Texture* texture) {
+		this->bumpTexture = texture;
+		mesh->SetBumpMap(*texture->GetTexture());
+	}
+	inline Texture*	GetBumpTexture() { return bumpTexture; }
+
 	inline void SetVisible(bool visible) { this->visible = visible; }
 	inline bool GetVisible() const { return visible; }
 
@@ -71,6 +77,7 @@ protected:
 	Shader*		shader;
 	Mesh*		mesh;
 	Texture*	texture;
+	Texture*	bumpTexture;
 	Vector4		colour;
 
 	float distanceFromCamera;

@@ -55,6 +55,8 @@ int main() {
 	}
 
 	delete blur;
+	delete sceneShader;
+	delete processShader;
 	delete heightMap;
 	delete shader;
 	delete tex;

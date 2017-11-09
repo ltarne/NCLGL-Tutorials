@@ -69,6 +69,7 @@
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="HeightMap.h" />
     <ClInclude Include="PostProcessingEffect.h" />
+    <ClInclude Include="Light.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Data Types">
