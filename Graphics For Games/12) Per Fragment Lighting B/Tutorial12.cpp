@@ -47,6 +47,7 @@ int main() {
 	delete heightMap;
 	delete shader;
 	delete tex;
+	delete bumpTex;
 
 	return 0;
 }

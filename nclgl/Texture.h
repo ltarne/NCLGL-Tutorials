@@ -4,6 +4,7 @@ class Texture
 {
 public:
 	Texture(string filePath);
+	Texture(string* filePaths);
 	~Texture();
 
 	inline GLuint*	GetTexture() { return &texture; }

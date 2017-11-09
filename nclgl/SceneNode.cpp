@@ -69,10 +69,16 @@ void SceneNode::Draw(const OGLRenderer &renderer) {
 
 
 	LoadUniforms();
-	
+	if (!depthTest) {
+		glDisable(GL_DEPTH_TEST);
+	}
 	
 
 	if (mesh != nullptr) {
 		mesh->Draw();
+	}
+
+	if (!depthTest) {
+		glEnable(GL_DEPTH_TEST);
 	}
 }

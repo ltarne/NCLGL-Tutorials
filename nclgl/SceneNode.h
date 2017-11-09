@@ -43,6 +43,9 @@ public:
 	inline void SetVisible(bool visible) { this->visible = visible; }
 	inline bool GetVisible() const { return visible; }
 
+	inline void SetDepthTest(bool depthTest) { this->depthTest = depthTest; }
+	inline bool GetDepthTest() const { return depthTest; }
+
 	inline float GetBoundingRadius() const { return boundingRadius; }
 	inline void SetBoundingRadius(float boundingRadius) { this->boundingRadius = boundingRadius; }
 
@@ -84,6 +87,7 @@ protected:
 	float boundingRadius;
 
 	bool visible;
+	bool depthTest;
 	
 };
 
