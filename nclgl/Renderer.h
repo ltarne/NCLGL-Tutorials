@@ -7,7 +7,6 @@
 #include "PostProcessingEffect.h"
 #include <algorithm>
 
-#define POST_PASSES 10
 
 class Renderer : public OGLRenderer	{
 public:
@@ -16,9 +15,6 @@ public:
 
 	virtual void UpdateScene(float msec);
 	virtual void RenderScene();
-	void RenderPPScene();
-
-	//inline void SetProcessShader(Shader* processShader) { this->processShader = processShader; }
 
 	void SwitchToPerspective();
 	void SwitchToOrthographic();
@@ -31,6 +27,11 @@ public:
 
 	void AttachSceneGraph(SceneNode* node) { root->AddChild(node); }
 
+	void AttachPostProcessingEffect(PostProcessingEffect* effect) {
+		postProcessingList.push_back(effect);
+		effect->SetFBInfo(&FBInfo);
+	}
+
 	void ToggleDepth();
 	
 	void SetRotation(float rotation) { root->SetRotation(Matrix4::Rotation(rotation, Vector3(0,0,1))); }
@@ -41,28 +42,24 @@ public:
 
 
 protected:
-	/*void LoadPostProcessing();*/
+	void LoadPostProcessing();
 	void BuildNodeLists(SceneNode* from);
 	void SortNodeLists();
 	void ClearNodeLists();
+
 	void DrawNodes();
 	void DrawNode(SceneNode* node);
 
-	/*void PresentScene();
-	void DrawPostProcess();*/
+	void DrawEffects();
+	void PresentScene();
 	void DrawScene();
 
-	/*Shader* processShader;
-	GLuint bufferFBO;
-	GLuint processFBO;
-	GLuint bufferColourTex[2];
-	GLuint bufferDepthTex;*/
+	FrameBufferInfo FBInfo;
+	
 
 	SceneNode* root;
-	/*SceneNode* quad;*/
 	Camera* camera;
 	Frustum frameFrustrum;
-	PostProcessingEffect* blur;
 
 	bool usingDepth;
 	bool usingAlpha;
@@ -73,4 +70,5 @@ protected:
 
 	vector<SceneNode*> transparentNodeList;
 	vector<SceneNode*> nodeList;
+	vector<PostProcessingEffect*> postProcessingList;
 };

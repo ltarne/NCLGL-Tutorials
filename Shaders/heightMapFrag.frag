@@ -18,6 +18,6 @@ void main(void)	{
 	fragColor.r = (10 / IN.position.y) * 100;
 
 	if(useTexture) {
-		fragColor *= texture(tex, IN.texCoord);
+		fragColor = texture(tex, IN.texCoord);
 	}
 }

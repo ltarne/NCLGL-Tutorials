@@ -3,11 +3,20 @@
 
 #define POST_PASSES 10
 
+struct FrameBufferInfo {
+	GLuint bufferFBO;
+	GLuint processFBO;
+	GLuint bufferColourTex[2];
+	GLuint bufferDepthTex;
+};
+
 class PostProcessingEffect
 {
 public:
 	PostProcessingEffect(int width, int height, Shader* sceneShader, Shader* processingShader);
 	~PostProcessingEffect();
+
+	inline void SetFBInfo(FrameBufferInfo* FBInfo) { this->FBInfo = FBInfo; }
 
 	inline static void GenerateQuad() {
 		quad = Mesh::GenerateQuad();
@@ -20,11 +29,12 @@ public:
 		
 	}
 
-	inline GLuint GetFrameBuffer() {
-		return bufferFBO;
-	}
+	//inline GLuint GetFrameBuffer() {
+	//	return bufferFBO;
+	//}
 
 	virtual void Draw();
+	virtual void DrawOnce();
 
 	virtual void Present();
 
@@ -33,10 +43,12 @@ public:
 protected:
 	Shader* sceneShader;
 	Shader* processShader;
-	GLuint bufferFBO;
+	/*GLuint bufferFBO;
 	GLuint processFBO;
 	GLuint bufferColourTex[2];
-	GLuint bufferDepthTex;
+	GLuint bufferDepthTex;*/
+
+	FrameBufferInfo* FBInfo;
 
 	Matrix4 modelMatrix;
 	Matrix4 projMatrix;
