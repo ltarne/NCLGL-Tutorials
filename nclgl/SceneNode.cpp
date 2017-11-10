@@ -5,7 +5,6 @@ SceneNode::SceneNode(Shader* shader, Mesh * mesh, Vector4 colour) {
 	this->shader	= shader;
 	this->mesh		= mesh;
 	this->colour	= colour;
-	this->texture = nullptr;
 
 	parent			= NULL;
 	transform	= Matrix4();
@@ -25,27 +24,26 @@ SceneNode::~SceneNode() {
 	}
 }
 
-void SceneNode::LoadUniforms() {
-	//Texture Uniforms
-	glUniform1i(glGetUniformLocation(shader->GetProgram(), "tex"), 0);
-
-	glUniform1i(glGetUniformLocation(shader->GetProgram(), "bumpTex"), 1);
-	
+void SceneNode::LoadUniforms() {	
 
 	//Transform
 	Matrix4 modelMatrix = worldTransform * scale;
 	glUniformMatrix4fv(glGetUniformLocation(shader->GetProgram(), "modelMatrix"), 1, false, (float*)&modelMatrix);
 
-
-	if (texture) {
-		//Texture Matrix
-		glUniformMatrix4fv(glGetUniformLocation(shader->GetProgram(), "textureMatrix"), 1, false, (float*)&texture->GetTextureMatrix());
-	}
-	glUniform1i(glGetUniformLocation(shader->GetProgram(), "useTexture"), texture ? true : false);
-	
-	
 	//Colour
 	glUniform4fv(glGetUniformLocation(shader->GetProgram(), "nodeColour"), 1, (float*)&colour);
+
+	//Textures
+	glUniform1i(glGetUniformLocation(shader->GetProgram(), "useTexture"), textures.size() > 0 ? true : false);
+
+	for (int i = 0; i < textures.size() && i < TEXTURE_UNIT_MAX; ++i) {
+		glUniform1i(glGetUniformLocation(shader->GetProgram(), textures[i]->GetName().c_str()), textures[i]->GetNum());
+
+		glUniformMatrix4fv(glGetUniformLocation(shader->GetProgram(), "textureMatrix"), 1, false, (float*)&(textures[i]->GetTextureMatrix()));
+
+		glActiveTexture(Texture::textureUnits[textures[i]->GetNum()]);
+		glBindTexture(GL_TEXTURE_2D, *textures[i]->GetTexture());
+	}
 }
 
 void SceneNode::AddChild(SceneNode* child) {

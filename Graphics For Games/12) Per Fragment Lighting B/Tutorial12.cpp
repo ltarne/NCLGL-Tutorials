@@ -21,17 +21,17 @@ int main() {
 	shader->LinkProgram();
 
 	HeightMap* heightMap = new HeightMap(TEXTUREDIR "terrain.raw");
-
-	SceneNode* node = new SceneNode(shader, heightMap, Vector4(1, 1, 1, 1));
-	Texture* tex = new Texture(TEXTUREDIR "Barren Reds.JPG");
 	
+	Texture* tex = new Texture(TEXTUREDIR "Barren Reds.JPG", "tex");
 	tex->ToggleRepeating();
 
-	Texture* bumpTex = new Texture(TEXTUREDIR"Barren RedsDOT3.JPG");
+	Texture* bumpTex = new Texture(TEXTUREDIR"Barren RedsDOT3.JPG", "bumpTex");
 	bumpTex->ToggleRepeating();
 
-	node->SetTexture(tex);
-	node->SetBumpTexture(bumpTex);
+	SceneNode* node = new SceneNode(shader, heightMap, Vector4(1, 1, 1, 1));
+
+	node->AddTexture(tex);
+	node->AddTexture(bumpTex);
 
 	node->SetBoundingRadius(10000.0f);
 	node->SetTransform(Matrix4::Translation(Vector3(-((257 * 16.0f) / 2), -300, -((257 * 16.0f) / 2))));

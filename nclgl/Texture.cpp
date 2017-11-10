@@ -1,16 +1,22 @@
 #include "Texture.h"
 
+const GLenum Texture::textureUnits[] = { GL_TEXTURE0, GL_TEXTURE1, GL_TEXTURE2, GL_TEXTURE3, GL_TEXTURE4, GL_TEXTURE5, GL_TEXTURE6, GL_TEXTURE7 };
 
-Texture::Texture(string filePath) {
+Texture::Texture(string filePath, int num, string name) {
 	texture = SOIL_load_OGL_texture(filePath.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
 	repeating = false;
 	filtering = false;
+	this->name = name;
 	textureMatrix = Matrix4();
+	this->num = num;
 }
 
-Texture::Texture(string* filePaths) {
+Texture::Texture(string* filePaths, int num, string name) {
 	texture = SOIL_load_OGL_cubemap(filePaths[0].c_str(), filePaths[1].c_str(), filePaths[2].c_str(), filePaths[3].c_str(), filePaths[4].c_str(), filePaths[5].c_str(),
 		SOIL_LOAD_RGB, SOIL_CREATE_NEW_ID, 0);
+
+	this->name = name;
+	this->num = num;
 }
 
 Texture::~Texture() {

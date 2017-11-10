@@ -12,45 +12,12 @@ PostProcessingEffect::PostProcessingEffect(int width, int height, Shader* sceneS
 	modelMatrix.ToIdentity();
 
 
-	//glGenTextures(1, &bufferDepthTex);
-	//glBindTexture(GL_TEXTURE_2D, bufferDepthTex);
-	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
 
-	//for (int i = 0; i < 2; ++i) {
-	//	glGenTextures(1, &bufferColourTex[i]);
-	//	glBindTexture(GL_TEXTURE_2D, bufferColourTex[i]);
-	//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	//}
-
-	//glGenFramebuffers(1, &bufferFBO); //Render scene into this
-	//glGenFramebuffers(1, &processFBO); //Post processing in this
-
-	//glBindFramebuffer(GL_FRAMEBUFFER, bufferFBO);
-	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, bufferDepthTex, 0);
-	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, bufferDepthTex, 0);
-	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, bufferColourTex[0], 0);
-
-	//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE || !bufferDepthTex || !bufferColourTex[0]) {
-	//	cout << "Framebuffer failed!\n";
-	//	return;
-	//}
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 
 PostProcessingEffect::~PostProcessingEffect() {
-	/*glDeleteTextures(2, bufferColourTex);
-	glDeleteTextures(1, &bufferDepthTex);
-	glDeleteFramebuffers(1, &bufferFBO);
-	glDeleteFramebuffers(1, &processFBO);*/
+
 }
 
 void PostProcessingEffect::Draw() {

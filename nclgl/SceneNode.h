@@ -28,17 +28,8 @@ public:
 	inline void		SetShader(Shader* shader) { this->shader = shader; }
 	inline Shader*	GetShader() const { return shader; }
 
-	inline void		SetTexture(Texture* texture) {
-		this->texture = texture; 
-		mesh->SetTexture(*texture->GetTexture());
-	}
-	inline Texture*	GetTexture() { return texture; }
-
-	inline void		SetBumpTexture(Texture* texture) {
-		this->bumpTexture = texture;
-		mesh->SetBumpMap(*texture->GetTexture());
-	}
-	inline Texture*	GetBumpTexture() { return bumpTexture; }
+	inline void				AddTexture(Texture* texture) { this->textures.push_back(texture); }
+	inline vector<Texture*> GetTextures() { return textures; }
 
 	inline void SetVisible(bool visible) { this->visible = visible; }
 	inline bool GetVisible() const { return visible; }
@@ -79,12 +70,13 @@ protected:
 
 	Shader*		shader;
 	Mesh*		mesh;
-	Texture*	texture;
-	Texture*	bumpTexture;
+	vector<Texture*> textures;
 	Vector4		colour;
 
 	float distanceFromCamera;
 	float boundingRadius;
+
+	//static int count;
 
 	bool visible;
 	bool depthTest;

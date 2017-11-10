@@ -1,4 +1,4 @@
-#pragma comment(lib, "framework.lib")
+#pragma comment(lib, "nclgl.lib")
 
 #include "../../nclgl/window.h"
 #include "../../nclgl/Renderer.h"
@@ -20,31 +20,65 @@ int main() {
 	Shader* shader = new Shader(SHADERDIR"lightVert.vert", SHADERDIR"lightFrag.frag");
 	shader->LinkProgram();
 
+	Shader* skyBoxShader = new Shader(SHADERDIR"skyboxVert.vert", SHADERDIR"skyboxFrag.frag");
+	skyBoxShader->LinkProgram();
+
+	Shader* reflectionShader = new Shader(SHADERDIR"lightVert.vert", SHADERDIR"reflectFrag.frag");
+	reflectionShader->LinkProgram();
+
 	HeightMap* heightMap = new HeightMap(TEXTUREDIR "terrain.raw");
 	Mesh* quad = Mesh::GenerateQuad();
 
-	/*SceneNode* skybox = new SceneNode()*/
+	string textures[6] = { TEXTUREDIR "rusted_west.JPG",TEXTUREDIR "rusted_east.JPG",TEXTUREDIR "rusted_up.JPG",TEXTUREDIR "rusted_down.JPG",TEXTUREDIR "rusted_south.JPG",TEXTUREDIR "rusted_north.JPG" };
+	Texture* skyCubeMap = new Texture(textures, 1, "cubeTex");
 
-	SceneNode* node = new SceneNode(shader, heightMap, Vector4(1, 1, 1, 1));
-	Texture* tex = new Texture(TEXTUREDIR "Barren Reds.JPG");
-
-	tex->ToggleRepeating();
-
-	Texture* bumpTex = new Texture(TEXTUREDIR"Barren RedsDOT3.JPG");
+	Texture* bumpTex = new Texture(TEXTUREDIR"Barren RedsDOT3.JPG", 2, "bumpTex");
 	bumpTex->ToggleRepeating();
 
-	node->SetTexture(tex);
-	node->SetBumpTexture(bumpTex);
+//	Texture* waterTex = new Texture(TEXTUREDIR"brick.tga", 2, "waterTex");
 
+	Texture* tex = new Texture(TEXTUREDIR "Barren Reds.JPG", 3, "tex");
+	tex->ToggleRepeating();
+
+	SceneNode* skybox = new SceneNode(skyBoxShader, quad);
+	skybox->SetDepthTest(false);
+	skybox->AddTexture(skyCubeMap);
+	skybox->SetBoundingRadius(1000000000.0f);
+
+	/*SceneNode* water = new SceneNode(reflectionShader, quad);
+	water->AddTexture(waterTex);
+	water->AddTexture(skyCubeMap);
+	water->SetBoundingRadius(100000000.0f);*/
+
+	SceneNode* node = new SceneNode(shader, heightMap, Vector4(1, 1, 1, 1));
+	node->AddTexture(tex);
+	node->AddTexture(bumpTex);
 	node->SetBoundingRadius(10000.0f);
 	node->SetTransform(Matrix4::Translation(Vector3(-((257 * 16.0f) / 2), -300, -((257 * 16.0f) / 2))));
 
-
+	renderer.AttachSceneGraph(skybox);
 	renderer.AttachSceneGraph(node);
 
+	/*float waterRotation = 0.0f;
+
+	float heightX = (RAW_WIDTH*HEIGHTMAP_X) / 2.0f;
+	float heightY = (256 * HEIGHTMAP_Y) / 3.0f;
+	float heightZ = (RAW_HEIGHT*HEIGHTMAP_Z) / 2.0f;
+	water->SetTransform(Matrix4::Translation(Vector3(0, -100, 0)));
+	water->SetScale(Vector3(RAW_WIDTH*HEIGHTMAP_X/2.0f, RAW_WIDTH*HEIGHTMAP_X/2.0f, 10));
+	water->SetRotation(Matrix4::Rotation(90, Vector3(1.0f, 0.0f, 0.0f)));*/
+
+	//renderer.AttachSceneGraph(water);
+
+
 	while(w.UpdateWindow() && !Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE)){
-		renderer.UpdateScene(w.GetTimer()->GetTimedMS());
+		float msec = w.GetTimer()->GetTimedMS();
+		renderer.UpdateScene(msec);
 		renderer.RenderScene();
+
+		//waterTex->SetTextureMatrix(Matrix4::Rotation(waterRotation, Vector3(0.0f, 0.0f, 1.0f)) * Matrix4::Scale(Vector3(10, 10, 10)));
+		//waterTex->RotateMatrix(waterRotation);
+		//waterRotation += msec /1000.0f;
 	}
 
 	delete heightMap;

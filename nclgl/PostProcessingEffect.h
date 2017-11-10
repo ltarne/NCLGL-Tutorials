@@ -29,9 +29,6 @@ public:
 		
 	}
 
-	//inline GLuint GetFrameBuffer() {
-	//	return bufferFBO;
-	//}
 
 	virtual void Draw();
 	virtual void DrawOnce();
@@ -43,10 +40,7 @@ public:
 protected:
 	Shader* sceneShader;
 	Shader* processShader;
-	/*GLuint bufferFBO;
-	GLuint processFBO;
-	GLuint bufferColourTex[2];
-	GLuint bufferDepthTex;*/
+
 
 	FrameBufferInfo* FBInfo;
 

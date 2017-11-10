@@ -9,11 +9,12 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)	{
 
 	root = new SceneNode(debugDrawShader);
 
-	light = new Light(Vector3(0, 500.0f, 0),
-		Vector4(0,1,1,1), (RAW_WIDTH*HEIGHTMAP_X) / 2.0f);
+	light = new Light(Vector3((RAW_WIDTH*HEIGHTMAP_X) / 2, 500.0f, -(RAW_HEIGHT*HEIGHTMAP_Z)/2),
+		Vector4(1,1.0,1.0,1), (RAW_WIDTH*HEIGHTMAP_X)*2.0f);
 
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
+	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	
 	LoadPostProcessing();
 
