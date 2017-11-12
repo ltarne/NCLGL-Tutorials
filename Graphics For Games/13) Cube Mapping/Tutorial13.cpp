@@ -30,12 +30,12 @@ int main() {
 	Mesh* quad = Mesh::GenerateQuad();
 
 	string textures[6] = { TEXTUREDIR "rusted_west.JPG",TEXTUREDIR "rusted_east.JPG",TEXTUREDIR "rusted_up.JPG",TEXTUREDIR "rusted_down.JPG",TEXTUREDIR "rusted_south.JPG",TEXTUREDIR "rusted_north.JPG" };
-	Texture* skyCubeMap = new Texture(textures, 1, "cubeTex");
+	Texture* skyCubeMap = new Texture(textures, 0, "cubeTex");
 
-	Texture* bumpTex = new Texture(TEXTUREDIR"Barren RedsDOT3.JPG", 2, "bumpTex");
+	Texture* bumpTex = new Texture(TEXTUREDIR"Barren RedsDOT3.JPG", 1, "bumpTex");
 	bumpTex->ToggleRepeating();
 
-//	Texture* waterTex = new Texture(TEXTUREDIR"brick.tga", 2, "waterTex");
+	Texture* waterTex = new Texture(TEXTUREDIR"water.png", 2, "waterTex");
 
 	Texture* tex = new Texture(TEXTUREDIR "Barren Reds.JPG", 3, "tex");
 	tex->ToggleRepeating();
@@ -45,10 +45,11 @@ int main() {
 	skybox->AddTexture(skyCubeMap);
 	skybox->SetBoundingRadius(1000000000.0f);
 
-	/*SceneNode* water = new SceneNode(reflectionShader, quad);
+	SceneNode* water = new SceneNode(reflectionShader, quad);
 	water->AddTexture(waterTex);
 	water->AddTexture(skyCubeMap);
-	water->SetBoundingRadius(100000000.0f);*/
+	
+	water->SetBoundingRadius(100000000.0f);
 
 	SceneNode* node = new SceneNode(shader, heightMap, Vector4(1, 1, 1, 1));
 	node->AddTexture(tex);
@@ -59,16 +60,16 @@ int main() {
 	renderer.AttachSceneGraph(skybox);
 	renderer.AttachSceneGraph(node);
 
-	/*float waterRotation = 0.0f;
+	float waterRotation = 0.0f;
 
 	float heightX = (RAW_WIDTH*HEIGHTMAP_X) / 2.0f;
 	float heightY = (256 * HEIGHTMAP_Y) / 3.0f;
 	float heightZ = (RAW_HEIGHT*HEIGHTMAP_Z) / 2.0f;
 	water->SetTransform(Matrix4::Translation(Vector3(0, -100, 0)));
 	water->SetScale(Vector3(RAW_WIDTH*HEIGHTMAP_X/2.0f, RAW_WIDTH*HEIGHTMAP_X/2.0f, 10));
-	water->SetRotation(Matrix4::Rotation(90, Vector3(1.0f, 0.0f, 0.0f)));*/
+	water->SetRotation(Matrix4::Rotation(90, Vector3(1.0f, 0.0f, 0.0f)));
 
-	//renderer.AttachSceneGraph(water);
+	renderer.AttachSceneGraph(water);
 
 
 	while(w.UpdateWindow() && !Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE)){
@@ -76,9 +77,9 @@ int main() {
 		renderer.UpdateScene(msec);
 		renderer.RenderScene();
 
-		//waterTex->SetTextureMatrix(Matrix4::Rotation(waterRotation, Vector3(0.0f, 0.0f, 1.0f)) * Matrix4::Scale(Vector3(10, 10, 10)));
-		//waterTex->RotateMatrix(waterRotation);
-		//waterRotation += msec /1000.0f;
+		waterTex->SetTextureMatrix(Matrix4::Rotation(waterRotation, Vector3(0.0f, 0.0f, 1.0f)) * Matrix4::Scale(Vector3(10, 10, 10)));
+		waterTex->RotateMatrix(waterRotation);
+		waterRotation += msec /1000.0f;
 	}
 
 	delete heightMap;

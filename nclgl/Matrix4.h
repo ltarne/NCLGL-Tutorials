@@ -26,6 +26,7 @@ class Matrix4	{
 public:
 	Matrix4(void);
 	Matrix4(float elements[16]);
+	Matrix4(const Matrix4 &mat);
 	~Matrix4(void);
 
 	float	values[16];
@@ -72,6 +73,14 @@ public:
 	static Matrix4 BuildViewMatrix(const Vector3 &from, const Vector3 &lookingAt, const Vector3 up = Vector3(0,1,0));
 
 	Matrix4 GetTransposedRotation();
+
+	inline Matrix4& operator=(const Matrix4 &mat) {
+		for (int i = 0; i < 16; ++i) {
+			this->values[i] = mat.values[i];
+		}
+
+		return *this;
+	}
 
 	//Multiplies 'this' matrix by matrix 'a'. Performs the multiplication in 'OpenGL' order (ie, backwards)
 	inline Matrix4 operator*(const Matrix4 &a) const{	

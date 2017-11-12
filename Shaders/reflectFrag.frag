@@ -21,12 +21,10 @@ out vec4 fragColour;
 
 void main(void) {
   vec4 diffuse = texture(waterTex, IN.texCoord);
-  //vec4 cubeDiff = texture(cubeTex, IN.texCoord);
   vec3 incident = normalize(IN.worldPos - cameraPos);
   float dist = length(lightPos - IN.worldPos);
   float atten = 1.0 - clamp(dist / lightRadius, 0.2, 1.0);
   vec4 reflection = texture(cubeTex, reflect(incident, normalize(IN.normal)));
 
   fragColour = (lightColour * diffuse * atten) * (diffuse + reflection);
-  //fragColour = cubeDiff;
 }
