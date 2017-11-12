@@ -33,7 +33,7 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)	{
 	camera  = new Camera();	//A camera!
 
 	//Again there's no fancy shader stuff, so it's just tutorial 3 again...
-	currentShader = new Shader(TEXTUREDIR"TexturedVertex.glsl", TEXTUREDIR"TexturedFragment.glsl");
+	currentShader = new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
 	
 	if(!currentShader->LinkProgram()) {
 		return;
@@ -43,7 +43,7 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)	{
 	and how many characters across each axis the font contains. (look at the
 	font texture in paint.net if you don't quite 'get' this)
 	*/
-	basicFont = new Font(SOIL_load_OGL_texture(SHADERDIR"tahoma.tga",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_COMPRESS_TO_DXT),16,16);
+	basicFont = new Font(SOIL_load_OGL_texture(TEXTUREDIR"tahoma.tga",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_COMPRESS_TO_DXT),16,16);
 
 	//The font is not alpha blended! It has a black background.
 	//but that doesn't matter, we can fiddle blend func to do 
@@ -110,7 +110,7 @@ void Renderer::DrawText(const std::string &text, const Vector3 &position, const 
 		projMatrix = Matrix4::Orthographic(-1.0f,1.0f,(float)width, 0.0f,(float)height, 0.0f);
 	}
 	//Either way, we update the matrices, and draw the mesh
-	UpdateShaderMatrices();
+	UpdateShaderMatrices(currentShader);
 	mesh->Draw();
 
 	delete mesh; //Once it's drawn, we don't need it anymore!
