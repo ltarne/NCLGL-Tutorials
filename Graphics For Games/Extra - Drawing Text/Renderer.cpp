@@ -75,6 +75,7 @@ void Renderer::RenderScene()	{
 	glUseProgram(currentShader->GetProgram());	//Enable the shader...
 	//And turn on texture unit 0
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
+	
 
 //Render function to encapsulate our font rendering!
 	DrawText("This is orthographic text!", Vector3(0,0,0), 16.0f);
@@ -93,6 +94,7 @@ but for a simple demonstration, this is fine...
 void Renderer::DrawText(const std::string &text, const Vector3 &position, const float size, const bool perspective)	{
 	//Create a new temporary TextMesh, using our line of text and our font
 	TextMesh* mesh = new TextMesh(text,*basicFont);
+	glBindTexture(GL_TEXTURE_2D, mesh->GetTexture());
 
 	//This just does simple matrix setup to render in either perspective or
 	//orthographic mode, there's nothing here that's particularly tricky.
