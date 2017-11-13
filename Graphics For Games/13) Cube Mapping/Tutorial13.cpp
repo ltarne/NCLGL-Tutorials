@@ -30,14 +30,15 @@ int main() {
 	Mesh* quad = Mesh::GenerateQuad();
 
 	string textures[6] = { TEXTUREDIR "rusted_west.JPG",TEXTUREDIR "rusted_east.JPG",TEXTUREDIR "rusted_up.JPG",TEXTUREDIR "rusted_down.JPG",TEXTUREDIR "rusted_south.JPG",TEXTUREDIR "rusted_north.JPG" };
-	Texture* skyCubeMap = new Texture(textures, 0, "cubeTex");
+	CubeMapTexture* skyCubeMap = new CubeMapTexture(textures, "cubeTex");
 
-	Texture* bumpTex = new Texture(TEXTUREDIR"Barren RedsDOT3.JPG", 1, "bumpTex");
+	Texture* bumpTex = new Texture(TEXTUREDIR"Barren RedsDOT3.JPG", "bumpTex");
 	bumpTex->ToggleRepeating();
 
-	Texture* waterTex = new Texture(TEXTUREDIR"water.png", 2, "waterTex");
+	Texture* waterTex = new Texture(TEXTUREDIR"water.png", "waterTex");
+	waterTex->ToggleRepeating();
 
-	Texture* tex = new Texture(TEXTUREDIR "Barren Reds.JPG", 3, "tex");
+	Texture* tex = new Texture(TEXTUREDIR "Barren Reds.JPG", "tex");
 	tex->ToggleRepeating();
 
 	SceneNode* skybox = new SceneNode(skyBoxShader, quad);

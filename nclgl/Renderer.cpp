@@ -25,6 +25,7 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)	{
 	blendMode = 0;
 	usingScissor = false;
 	usingStencil = false;
+	usingShadows = false;
 }
 Renderer::~Renderer(void)	{
 	delete light;
@@ -47,8 +48,10 @@ void Renderer::UpdateScene(float msec) {
 }
 
 void Renderer::RenderScene()	{
-	
-	if (postProcessingList.size() > 0) {
+	if (usingShadows) {
+
+	}
+	else if (postProcessingList.size() > 0) {
 		glBindFramebuffer(GL_FRAMEBUFFER, FBInfo.bufferFBO);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, FBInfo.bufferColourTex[0], 0);
 		DrawScene();
@@ -177,6 +180,33 @@ void Renderer::SortNodeLists() {
 void Renderer::ClearNodeLists() {
 	transparentNodeList.clear();
 	nodeList.clear();
+}
+
+void Renderer::CreateShadowMap() {
+	glBindFramebuffer(GL_FRAMEBUFFER, FBInfo.bufferFBO);
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	glViewport(0, 0, SHADOWSIZE, SHADOWSIZE);
+
+	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+	//ChangeShader
+
+	viewMatrix = postProcessingList[0]->GetViewMatrix();
+	textureMatrix = biasMatrix * (projMatrix * viewMatrix);
+
+	DrawScene();
+
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	glViewport(0, 0, width, height);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Renderer::PresentShadows() {
+	glActiveTexture(GL_TEXTURE5);
+	glBindTexture(GL_TEXTURE_2D, FBInfo.bufferColourTex[0]);
 }
 
 void Renderer::DrawNodes() {

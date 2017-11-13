@@ -7,7 +7,6 @@
     <ClCompile Include="MD5Anim.cpp" />
     <ClCompile Include="MD5FileData.cpp" />
     <ClCompile Include="MD5Mesh.cpp" />
-    <ClCompile Include="MD5Node.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="OBJMesh.cpp" />
     <ClCompile Include="OGLRenderer.cpp" />
@@ -21,13 +20,22 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="StencilNode.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="HeightMap.cpp" />
     <ClCompile Include="PostProcessingEffect.cpp" />
+    <ClCompile Include="CubeMapTexture.cpp" />
+    <ClCompile Include="SceneNode.cpp">
+      <Filter>SceneNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="StencilNode.cpp">
+      <Filter>SceneNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="MD5Node.cpp">
+      <Filter>SceneNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -39,7 +47,6 @@
     <ClInclude Include="MD5Anim.h" />
     <ClInclude Include="MD5FileData.h" />
     <ClInclude Include="MD5Mesh.h" />
-    <ClInclude Include="MD5Node.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="OBJMesh.h" />
     <ClInclude Include="OGLRenderer.h" />
@@ -62,18 +69,30 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Renderer.h" />
-    <ClInclude Include="SceneNode.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="StencilNode.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="HeightMap.h" />
     <ClInclude Include="PostProcessingEffect.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="CubeMapTexture.h" />
+    <ClInclude Include="SceneNode.h">
+      <Filter>SceneNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="StencilNode.h">
+      <Filter>SceneNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="MD5Node.h">
+      <Filter>SceneNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Data Types">
       <UniqueIdentifier>{67e82a66-7eba-4642-abd4-2cf8653aa911}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneNodes">
+      <UniqueIdentifier>{6bd7f953-fb3e-49e4-a921-a93c1510d008}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

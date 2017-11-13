@@ -28,7 +28,7 @@ int main() {
 	SceneNode* node = new SceneNode(shader, heightMap, Vector4(1, 1, 1, 1));
 	Texture* tex = new Texture(TEXTUREDIR "Barren Reds.JPG");
 	tex->ToggleRepeating();
-	node->SetTexture(tex);
+	node->AddTexture(tex);
 	node->SetBoundingRadius(10000.0f);
 	node->SetTransform(Matrix4::Translation(Vector3(-((257 * 16.0f) / 2), -300, -((257 * 16.0f) / 2))));
 

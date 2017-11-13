@@ -8,8 +8,8 @@ class Texture
 public:
 	static const GLenum textureUnits[TEXTURE_UNIT_MAX];
 
-	Texture(string filePath, int num, string name = "tex");
-	Texture(string* filePaths, int num, string name = "cubeMap" );
+	Texture(string name = "tex");
+	Texture(string filePath, string name);
 	~Texture();
 
 	inline GLuint*	GetTexture() { return &texture; }
@@ -28,6 +28,8 @@ public:
 	void ToggleFiltering();
 
 	void RotateMatrix(float angle);
+
+	virtual void LoadTexture(GLuint program, int index);
 
 protected:
 	GLuint	texture;

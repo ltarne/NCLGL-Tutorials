@@ -45,7 +45,7 @@ void Renderer::RenderScene()	{
 	emitter->SetLaunchParticles(16.0f);
 	emitter->SetParticleLifetime(2000.0f);
 	emitter->SetParticleSpeed(0.1f);
-	UpdateShaderMatrices();
+	UpdateShaderMatrices(currentShader);
 
 	emitter->Draw();
 

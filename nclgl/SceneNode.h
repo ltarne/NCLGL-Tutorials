@@ -1,6 +1,6 @@
 #pragma once
 #include "Mesh.h"
-#include "Texture.h"
+#include "CubeMapTexture.h"
 
 class SceneNode
 {

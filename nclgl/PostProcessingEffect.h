@@ -29,6 +29,8 @@ public:
 		
 	}
 
+	inline void SetViewMatrix(Matrix4 viewMatrix) { this->viewMatrix = viewMatrix; }
+	inline Matrix4 GetViewMatrix() { return viewMatrix; }
 
 	virtual void Draw();
 	virtual void DrawOnce();
@@ -40,7 +42,6 @@ public:
 protected:
 	Shader* sceneShader;
 	Shader* processShader;
-
 
 	FrameBufferInfo* FBInfo;
 

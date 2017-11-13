@@ -4,9 +4,11 @@
 #include "Camera.h"
 #include "Frustum.h"
 #include "MD5Node.h"
-#include "PostProcessingEffect.h"
+#include "ShadowEffect.h"
 #include "HeightMap.h"
 #include <algorithm>
+
+#define SHADOWSIZE 2048
 
 
 class Renderer : public OGLRenderer	{
@@ -48,6 +50,9 @@ protected:
 	void SortNodeLists();
 	void ClearNodeLists();
 
+	void CreateShadowMap();
+	void PresentShadows();
+
 	void DrawNodes();
 	void DrawNode(SceneNode* node);
 
@@ -67,6 +72,7 @@ protected:
 	int blendMode;
 	bool usingScissor;
 	bool usingStencil;
+	bool usingShadows;
 
 
 	vector<SceneNode*> transparentNodeList;

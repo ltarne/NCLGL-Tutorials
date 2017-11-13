@@ -37,12 +37,7 @@ void SceneNode::LoadUniforms() {
 	glUniform1i(glGetUniformLocation(shader->GetProgram(), "useTexture"), textures.size() > 0 ? true : false);
 
 	for (int i = 0; i < textures.size() && i < TEXTURE_UNIT_MAX; ++i) {
-		glUniform1i(glGetUniformLocation(shader->GetProgram(), textures[i]->GetName().c_str()), textures[i]->GetNum());
-
-		glUniformMatrix4fv(glGetUniformLocation(shader->GetProgram(), ("textureMatrix" + to_string(i)).c_str()), 1, false, (float*)&(textures[i]->GetTextureMatrix()));
-
-		glActiveTexture(Texture::textureUnits[textures[i]->GetNum()]);
-		glBindTexture(GL_TEXTURE_2D, *textures[i]->GetTexture());
+		textures[i]->LoadTexture(shader->GetProgram(), i);
 	}
 }
 

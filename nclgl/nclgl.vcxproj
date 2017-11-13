@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CubeMapTexture.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="HeightMap.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShadowEffect.cpp" />
     <ClCompile Include="StencilNode.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -39,6 +41,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChildMeshInterface.h" />
     <ClInclude Include="common.h" />
+    <ClInclude Include="CubeMapTexture.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="HeightMap.h" />
@@ -60,6 +63,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShadowEffect.h" />
     <ClInclude Include="StencilNode.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vector2.h" />
